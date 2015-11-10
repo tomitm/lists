@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "Lists Enhancements for Twitter",
+  "version": "1.0.0",
+
+  "description": "Makes lists more accessible in Twitter.",
+  "author": "tomitm",
+
+  "permissions": [
+    "https://twitter.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://twitter.com/*"
+      ],
+      "js": [
+        "contentscript.js"
+      ],
+      "css": [
+        "main.css"
+      ]
+    }
+  ]
+}

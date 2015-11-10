@@ -1,0 +1,25 @@
+.list-of-lists {
+  margin: 10px -15px;
+}
+
+.list-of-lists li {
+  border-top: 1px solid #e1e8ed;
+}
+
+.list-of-lists li:last-child {
+  border-bottom: 1px solid #e1e8ed;
+}
+
+.list-of-lists li a {
+  display: block;
+  padding: 8px 12px;
+  color: #66757f;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.list-of-lists li a:hover {
+  color: #0084b4;
+  background-color: #f5f8fa;
+  text-decoration: none;
+}
