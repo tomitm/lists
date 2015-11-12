@@ -3,7 +3,7 @@
 function getUsername() {
   // username is conveniently available as a data property on an element
   var user = document.getElementsByClassName('js-mini-current-user')[0];
-  if(!user) {
+  if (!user) {
     return;
   }
   return user.dataset.screenName;
@@ -29,21 +29,36 @@ function fetchLists(username) {
 }
 
 function extractLists(res) {
-  if(!res.page) {
+  if (!res.page) {
     return Promise.reject("Invalid response received.");
   }
   // response seems to be the whole page, but we only really need
   // the ProfileListItem-name <a> elements.
   var page = document.createElement('div');
   page.innerHTML = res.page;
-  return page.getElementsByClassName('ProfileListItem-name');
+  return [...page.getElementsByClassName('ProfileListItem-name')];
 }
 
-function createListsModule(links) {
+function getMetadata(elements) {
+  if (!elements) {
+    return [];
+  }
+  // convert elements to metadata
+  return elements.map(function (element) {
+    return {
+      name: element.innerText,
+      href: element.href
+    };
+  });
+}
+
+function createListsModule(meta) {
   // make it feel like part of the dashboard...
-  var linkList = [...links]
-                    .map(link => `<li>${link.outerHTML}</li>`)
-                    .join('');
+  var linkList = meta.map(list =>
+                  `<li>
+                    <a class="js-nav" href="${list.href}">${list.name}</a>
+                  </li>`)
+                  .join('');
 
   return `<div class="lists-inner">
             <div class="flex-module">
@@ -79,6 +94,7 @@ function setup() {
   var username = getUsername();
   fetchLists(username)
     .then(extractLists)
+    .then(getMetadata)
     .then(createListsModule)
     .then(addToPage)
     .catch((err) => { console.debug("[lists]", err); });
