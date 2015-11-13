@@ -6,6 +6,8 @@
   "description": "Makes lists more accessible in Twitter.",
   "author": "tomitm",
 
+  "icons": { "128": "icon128.png" },
+
   "permissions": [
     "https://twitter.com/*"
   ],
