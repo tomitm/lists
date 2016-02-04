@@ -1,0 +1,30 @@
+{
+  "name": "lists",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Twitter's lists are incredibly helpful for managing the signal-to-noise ratio\r in your feed, however, Twitter has them hidden away under the user menu in the header.",
+  "main": "src/contentscript.js",
+  "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+
+    "prepackage": "npm run build",
+    "package": "nodezip -c app.zip app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomitm/lists.git"
+  },
+  "keywords": [],
+  "author": "tomitm",
+  "bugs": {
+    "url": "https://github.com/tomitm/lists/issues"
+  },
+  "homepage": "https://github.com/tomitm/lists#readme",
+  "devDependencies": {
+    "babel-preset-es2015-rollup": "^1.1.1",
+    "node-zip": "^1.1.1",
+    "rollup": "^0.25.2",
+    "rollup-plugin-babel": "^2.3.9"
+  }
+}
