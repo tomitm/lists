@@ -1,4 +1,4 @@
-import {getLists} from './lists';
+import {getLists} from './lists.js';
 
 function createListOfLists(meta) {
   var linkList = meta.map(list =>

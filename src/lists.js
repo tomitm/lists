@@ -1,4 +1,4 @@
-import {getUsername} from './twitter';
+import {getUsername, fetchTemplate} from './twitter.js';
 
 /** Get a user's lists from Twitter. This'll return raw template-ish output.
   * This is right off of what you'd find on your real lists page, actually.
@@ -10,18 +10,7 @@ function fetchLists(username) {
     return Promise.reject("No username.");
   }
 
-  // we're part of the page, so do as Twitter does.
-  // downside is their cookies only have template access, so no clean API,
-  // but it allows this can work out of the box since OAuth isn't needed.
-  var options = {
-    credentials: 'include',
-    headers: {
-      accept: 'application/json, text/javascript, */*; q=0.01',
-      'x-push-state-request': true // required to return template
-    }
-  };
-  return fetch(`/${username}/lists`, options)
-          .then(res => res.json());
+  return fetchTemplate(`/${username}/lists`);
 }
 
 /** Extract the list elements from Twitter's template.

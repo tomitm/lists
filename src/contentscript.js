@@ -1,7 +1,9 @@
-import {setupSidebar} from './sidebar';
+import {setupSidebar} from './sidebar.js';
+import {setupProfileCard} from './profile-card.js';
 
 function setup() {
   setupSidebar();
+  setupProfileCard();
 }
 
 var lastpath = window.location.pathname;
