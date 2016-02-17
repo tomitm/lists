@@ -20,14 +20,25 @@ function extractLists(res) {
 }
 
 function appendProfileHovercard(listOfLists) {
-  var card = document.querySelector("#profile-hover-container .profile-card");
+  var container = document.querySelector("#profile-hover-container");
+  var card = container.querySelector(".profile-card");
   if (!card) return;
 
   var listDiv = document.createElement('div');
   listDiv.className = "ProfileCardLists";
   listDiv.innerHTML = listOfLists;
 
+  var initialCardHeight = card.offsetHeight;
   card.appendChild(listDiv);
+
+  // adjust gravity-south cards for the additional list height
+  var south = card.className.split(" ").indexOf("gravity-south") > 0;
+  if (south) {
+    var diff = card.offsetHeight - initialCardHeight;
+    container.style.transform = `translate(0, -${diff}px)`
+  } else {
+    container.style.transform = null; // reset value from south
+  }
 }
 
 function getCardUserId() {
