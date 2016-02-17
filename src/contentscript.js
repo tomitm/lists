@@ -1,23 +1,20 @@
 import {setupSidebar} from './sidebar.js';
 import {setupProfileCard} from './profile-card.js';
 
-function setup() {
-  setupSidebar();
-  setupProfileCard();
+function setup(pageChange) {
+  setupSidebar(pageChange);
+  setupProfileCard(pageChange);
 }
 
-var lastpath = window.location.pathname;
 function init() {
   setup();
 
-  // detect path change to setup on new page
-  setInterval(() => {
-    if (window.location.pathname === lastpath) {
-      return;
-    }
-    lastpath = window.location.pathname;
-    setup();
-  }, 500);
+  var observer = new MutationObserver(() => {
+    setup(true);
+  });
+  var target = document.querySelector("head link[rel='canonical']");
+  var config = { attributes: true };
+  observer.observe(target, config);
 }
 
 window.addEventListener("load", init);

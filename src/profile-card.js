@@ -45,7 +45,9 @@ function updateProfileHovercard() {
     .then(appendProfileHovercard);
 }
 
-export function setupProfileCard() {
+export function setupProfileCard(pageChange) {
+  if (pageChange) return;
+
   var observer = new MutationObserver((mutations) => {
     // only update when nodes added (user info inserted)
     if (mutations[0].addedNodes.length <= 0) return;
