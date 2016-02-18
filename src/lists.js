@@ -1,4 +1,4 @@
-import {getUsername} from './twitter';
+import {getUsername, fetchTemplate} from './twitter.js';
 
 /** Get a user's lists from Twitter. This'll return raw template-ish output.
   * This is right off of what you'd find on your real lists page, actually.
@@ -10,18 +10,7 @@ function fetchLists(username) {
     return Promise.reject("No username.");
   }
 
-  // we're part of the page, so do as Twitter does.
-  // downside is their cookies only have template access, so no clean API,
-  // but it allows this can work out of the box since OAuth isn't needed.
-  var options = {
-    credentials: 'include',
-    headers: {
-      accept: 'application/json, text/javascript, */*; q=0.01',
-      'x-push-state-request': true // required to return template
-    }
-  };
-  return fetch(`/${username}/lists`, options)
-          .then(res => res.json());
+  return fetchTemplate(`/${username}/lists`);
 }
 
 /** Extract the list elements from Twitter's template.
@@ -56,7 +45,36 @@ function getMetadata(elements) {
   });
 }
 
+/** Fetch the list memberships for the given user in the current users' lists.
+  * This is a raw HTML template that Twitter uses on the add to list modal.
+  * @param {string} username
+  * @return {Promise<object>} - The good stuff is in the html property
+  */
+function fetchMemberships(username) {
+  if (!username) {
+    return Promise.reject("No username.");
+  }
+
+  return fetchTemplate(`/i/${username}/lists`);
+}
+
+/** Extract the HTML from the JSON payload and grab just the container.
+  * @param {Object} res
+  * @return {string}
+  */
+function extractMemberships(res) {
+  if (!res.html) {
+    return Promise.reject("Invalid response received");
+  }
+
+  var html = document.createElement('div');
+  html.innerHTML = res.html;
+  return html.querySelector('.list-membership-container').outerHTML;
+}
+
+
 var lists = null;
+
 /** Get the current user's lists.
   * @return {Promise<array<object>>} lists
   */
@@ -70,5 +88,17 @@ export function getLists() {
     .then(extractLists)
     .then(getMetadata);
 
+  // on failure, reset so we can try again later
+  lists.catch(() => { lists = null; });
+
   return lists;
+}
+
+/** Get a given user's list memberships
+  * @param {string} username
+  * @return {Promise<string>} Memberships modal HTML
+  */
+export function getMemberships(username) {
+  return fetchMemberships(username)
+    .then(extractMemberships);
 }

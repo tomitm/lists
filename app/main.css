@@ -47,3 +47,24 @@ ul.list-membership-container li {
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
 }
+
+.ProfileCardLists .list-membership-container {
+  margin-bottom: 0;
+  /* li are 37px each, 37*4 = 148 */
+  max-height: 148px;
+  overflow-y: auto;
+}
+
+.ProfileCardLists .list-membership-container li {
+  border-left: 0;
+  border-right: 0;
+}
+
+.ProfileCardLists .list-membership-container li:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.ProfileCardLists .list-membership-container li:last-child {
+  border-bottom: 0;
+}

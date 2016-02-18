@@ -16,6 +16,7 @@
       "matches": [
         "https://twitter.com/*"
       ],
+      "run_at": "document_end",
       "js": [
         "contentscript.js"
       ],
