@@ -45,5 +45,5 @@ export function setupSidebar() {
     .then(createListOfLists)
     .then(createListsModule)
     .then(addSidebar)
-    .catch((err) => { console.debug("[lists]", err); });
+    .catch((err) => { console.debug("[lists] failed to setup sidebar", err); });
 }

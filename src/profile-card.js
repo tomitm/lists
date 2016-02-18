@@ -1,44 +1,43 @@
-import {getLists} from './lists.js';
+import {getMemberships} from './lists.js';
 import {postForm, fetchTemplate} from './twitter.js';
 
-function fetchLists(username) {
-  if (!username) {
-    return Promise.reject("No username.");
+var hoverContainer = null;
+function getHoverContainer() {
+  if (!!hoverContainer) {
+    return hoverContainer;
   }
-
-  return fetchTemplate(`/i/${username}/lists`);
+  hoverContainer = document.querySelector("#profile-hover-container");
+  return hoverContainer;
 }
 
-function extractLists(res) {
-  if (!res.html) {
-    return Promise.reject("Invalid response received");
-  }
-
-  var html = document.createElement('div');
-  html.innerHTML = res.html;
-  return html.querySelector('.list-membership-container').outerHTML;
-}
-
+/** Click handler for list - take the list <li> target, deterime the user and list
+  * then send it off to the server to add/remove from the user from that list.
+  * Behaviour should be exactly like the normal add list menu.
+  * @param {MouseEvent} e
+  */
 function listClick(e) {
   e.preventDefault(); // for click on checkbox
 
-  var containerEl = document.querySelector("#profile-hover-container");
+  var containerEl = getHoverContainer();
   var listEl;
 
   if (e.target.tagName === "LI") {
     listEl = e.target;
   } else {
+    // clicked on a span/input/etc, use the path to work our way up the path
     var targets = e.path.filter((el) => el.tagName === "LI");
     if (targets.length < 1) return;
     listEl = targets[0];
   }
 
+  // if we somehow failed to get either element, bail as they're essential
   if(!listEl || !containerEl) return;
 
   var listId = listEl.dataset.listId;
   var userId = containerEl.dataset.userId;
   var inputEl = listEl.children[`list_${listId}`];
 
+  // Twitter has a cute little pending animation while loading, let's use it.
   listEl.className = "pending";
   function clearPending() {
     listEl.className = null;
@@ -55,8 +54,12 @@ function listClick(e) {
     .then(clearPending, clearPending); // .finally didn't make it into spec?!
 }
 
+/** Take the list memberships and append them to the profile card, then
+  * adjust the height if necessary.
+  * @param {string} listOfLists
+  */
 function appendProfileHovercard(listOfLists) {
-  var container = document.querySelector("#profile-hover-container");
+  var container = getHoverContainer();
   var card = container.querySelector(".profile-card");
   if (!card) return;
 
@@ -78,30 +81,45 @@ function appendProfileHovercard(listOfLists) {
   }
 }
 
+/** Get the userId for the user the card belongs to.
+  * @return {string}
+  */
 function getCardUserId() {
-  var container = document.querySelector("#profile-hover-container");
+  var container = getHoverContainer();
   if (!container) return;
   return container.dataset.userId;
 }
 
+/** Update the profile card with the user's list memberships.
+  */
 function updateProfileHovercard() {
   var userId = getCardUserId();
   if (!userId) return;
 
-  fetchLists(userId)
-    .then(extractLists)
-    .then(appendProfileHovercard);
+  getMemberships(userId)
+    .then(appendProfileHovercard)
+    .catch((err) => {
+      console.warn("[lists] failed to setup profile card", err);
+    });
 }
 
+/** Initial setup for the profile card feature
+  * @param {boolean} [pageChange=false] - If called as a result of page changed
+  */
 export function setupProfileCard(pageChange) {
   if (pageChange) return;
 
+  // Twitter keeps #profile-hover-container around and updates the child nodes
+  // on hover, so observe that. Sadly don't have direct access to their events.
   var observer = new MutationObserver((mutations) => {
     // only update when nodes added (user info inserted)
     if (mutations[0].addedNodes.length <= 0) return;
     updateProfileHovercard();
   });
-  var target = document.querySelector("#profile-hover-container");
+
+  // The attribute is changed first, but need to wait until the child nodes are
+  // added otherwise the element we append to isn't there.
   var config = { childList: true };
+  var target = getHoverContainer();
   observer.observe(target, config);
 }

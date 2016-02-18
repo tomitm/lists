@@ -1,6 +1,6 @@
 export function getUsername() {
   // username is conveniently available as a data property on an element
-  var user = document.querySelector('js-mini-current-user');
+  var user = document.querySelector('.js-mini-current-user');
   if (!user) {
     return;
   }
