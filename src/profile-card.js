@@ -1,5 +1,5 @@
 import {getLists} from './lists.js';
-import {fetchTemplate} from './twitter.js';
+import {postForm, fetchTemplate} from './twitter.js';
 
 function fetchLists(username) {
   if (!username) {
@@ -19,6 +19,42 @@ function extractLists(res) {
   return html.querySelector('.list-membership-container').outerHTML;
 }
 
+function listClick(e) {
+  e.preventDefault(); // for click on checkbox
+
+  var containerEl = document.querySelector("#profile-hover-container");
+  var listEl;
+
+  if (e.target.tagName === "LI") {
+    listEl = e.target;
+  } else {
+    var targets = e.path.filter((el) => el.tagName === "LI");
+    if (targets.length < 1) return;
+    listEl = targets[0];
+  }
+
+  if(!listEl || !containerEl) return;
+
+  var listId = listEl.dataset.listId;
+  var userId = containerEl.dataset.userId;
+  var inputEl = listEl.children[`list_${listId}`];
+
+  listEl.className = "pending";
+  function clearPending() {
+    listEl.className = null;
+  }
+
+  var data = {};
+  if (inputEl.checked) { // user is already a list member, removing instead
+    data._method = "DELETE";
+  }
+  postForm(`/i/${userId}/lists/${listId}/members`, data)
+    .then(() => {
+      inputEl.checked = !inputEl.checked;
+    })
+    .then(clearPending, clearPending); // .finally didn't make it into spec?!
+}
+
 function appendProfileHovercard(listOfLists) {
   var container = document.querySelector("#profile-hover-container");
   var card = container.querySelector(".profile-card");
@@ -27,6 +63,7 @@ function appendProfileHovercard(listOfLists) {
   var listDiv = document.createElement('div');
   listDiv.className = "ProfileCardLists";
   listDiv.innerHTML = listOfLists;
+  listDiv.addEventListener("click", listClick);
 
   var initialCardHeight = card.offsetHeight;
   card.appendChild(listDiv);
@@ -44,7 +81,7 @@ function appendProfileHovercard(listOfLists) {
 function getCardUserId() {
   var container = document.querySelector("#profile-hover-container");
   if (!container) return;
-  return container.attributes.getNamedItem("data-user-id").value;
+  return container.dataset.userId;
 }
 
 function updateProfileHovercard() {
