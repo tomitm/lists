@@ -17,4 +17,4 @@ function init() {
   observer.observe(target, config);
 }
 
-window.addEventListener("load", init);
+init();
