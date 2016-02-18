@@ -1,8 +1,8 @@
 {
   "name": "lists",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Twitter's lists are incredibly helpful for managing the signal-to-noise ratio\r in your feed, however, Twitter has them hidden away under the user menu in the header.",
+  "description": "Lists improvements for Twitter that you'd think were already part of Twitter.",
   "main": "src/contentscript.js",
   "scripts": {
     "build": "rollup -c rollup.config.js",
