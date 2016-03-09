@@ -3,44 +3,42 @@ import * as storage from './storage.js';
 
 import dragula from 'dragula';
 
-function reorderFromStorage() {
+export function reorderElements(lists, container, elements, getElementData) {
+  [...elements].map((element) => { // give each element a listIndex if we know it's index
+    var {userId, listId} = getElementData(element);
+    var index = lists.findIndex((list) => list.userId === userId && list.listId === listId);
+
+    if (index !== -1) {
+      element.dataset.listIndex = index;
+    }
+    return element
+  })
+  .filter((element) => !!element.dataset.listIndex) // filter out unknowns
+  .sort((a, b) => { // sort the elements
+    var aIndex = a.dataset.listIndex;
+    var bIndex = b.dataset.listIndex;
+
+    if (aIndex < bIndex) return -1;
+    if (aIndex > bIndex) return 1;
+
+    return 0;
+  })
+  .reverse() // stack elements on top, unknowns maintain their order at bottom
+  .forEach((element) => {
+    container.insertBefore(element, container.firstChild)
+  })
+}
+
+function reorder() {
   var container = document.querySelector('.GridTimeline-items')
   var elements = container.querySelectorAll('.Grid');
-
-  while (container.lastChild) {
-    container.removeChild(container.lastChild);
-  }
-
-  storage.get("lists").then(({lists}) => {
-    var sorted = [...elements]
-      .map((element) => { // give each element a listIndex if we know it's index
-        var {userId, listId} = element.querySelector('.ProfileListItem').dataset;
-        var index = lists.findIndex((list) => list.userId === userId && list.listId === listId);
-        if (index != -1) {
-          element.dataset.listIndex = index;
-        }
-        return element;
-      })
-      .sort((a, b) => { // sort the elements
-        var aIndex = a.dataset.listIndex;
-        var bIndex = b.dataset.listIndex;
-
-        if (!aIndex && !bIndex) return 0;   // neither defined
-        if (!!aIndex && !bIndex) return 1;  // indexed on top, new on bottom
-        if (!aIndex && !!bIndex) return -1;
-
-        if (aIndex < bIndex) return -1;
-        if (aIndex > bIndex) return 1;
-
-        return 0;
-      })
-      .forEach((element) => { // re-add to container
-        container.appendChild(element);
-      });
+  var getElementData = (element) => element.querySelector('.ProfileListItem').dataset;
+  getListsFromStorage().then(({lists}) => {
+    reorderElements(lists, container, elements, getElementData)
   });
 }
 
-function getLists() {
+export function getListsFromPage() {
   return [...document.querySelectorAll('.ProfileListItem')]
     .map(({dataset}) => {
       return {
@@ -50,13 +48,17 @@ function getLists() {
     });
 }
 
-function updateStorage(lists) {
-  storage.set({lists})
+export function getListsFromStorage() {
+  return storage.get('lists');
+}
+
+function updateStoredLists() {
+  var lists = getListsFromPage();
+  return storage.set({lists});
 }
 
 function onDrop() {
-  var lists = getLists();
-  updateStorage(lists);
+  updateStoredLists();
 }
 
 function setupDragulaHandlers(drake) {
@@ -80,5 +82,5 @@ export function setupManage() {
   }
   var drake = setupDragula();
   setupDragulaHandlers(drake);
-  reorderFromStorage();
+  reorder();
 }
