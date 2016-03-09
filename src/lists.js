@@ -1,4 +1,5 @@
-import {getUsername, fetchTemplate} from './twitter.js';
+import {getUsername, getUserId, fetchTemplate} from './twitter.js';
+import {reorderElements, getListsFromStorage} from './manage.js';
 
 /** Get a user's lists from Twitter. This'll return raw template-ish output.
   * This is right off of what you'd find on your real lists page, actually.
@@ -25,7 +26,16 @@ function extractLists(res) {
   // the ProfileListItem-name <a> elements.
   var page = document.createElement('div');
   page.innerHTML = res.page;
-  return [...page.getElementsByClassName('ProfileListItem-name')];
+
+  var container = page.querySelector('.GridTimeline-items')
+  var elements = container.querySelectorAll('.Grid');
+  var getElementData = (element) => element.querySelector('.ProfileListItem').dataset;
+  return getListsFromStorage().then(({lists}) => {
+    reorderElements(lists, container, elements, getElementData);
+
+    return [...page.querySelectorAll('.ProfileListItem-name')];
+  });
+
 }
 
 /** Convert elements into sweet JSON metadata for our use.
@@ -69,7 +79,19 @@ function extractMemberships(res) {
 
   var html = document.createElement('div');
   html.innerHTML = res.html;
-  return html.querySelector('.list-membership-container').outerHTML;
+
+  var container = html.querySelector('.list-membership-container')
+  var elements = container.querySelectorAll('li');
+  var getElementData = (element) => {
+    var userId = getUserId(); // can only modify your own lists
+    var listId = element.dataset.listId;
+    return {userId, listId};
+  }
+  return getListsFromStorage().then(({lists}) => {
+    reorderElements(lists, container, elements, getElementData);
+
+    return html.querySelector('.list-membership-container').outerHTML;
+  });
 }
 
 

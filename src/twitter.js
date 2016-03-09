@@ -7,6 +7,10 @@ export function getUsername() {
   return user.dataset.screenName;
 }
 
+export function getUserId() {
+  return getInitData().userId;
+}
+
 function getInitData() {
   return JSON.parse(document.querySelector("#init-data").value);
 }
