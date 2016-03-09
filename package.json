@@ -1,15 +1,14 @@
 {
   "name": "lists",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": true,
   "description": "Lists improvements for Twitter that you'd think were already part of Twitter.",
   "main": "src/contentscript.js",
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-
     "prepackage": "npm run build",
-    "package": "nodezip -c app.zip app"
+    "package": "cd app && nodezip -c ../app.zip ./"
   },
   "repository": {
     "type": "git",
