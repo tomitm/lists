@@ -2,4 +2,5 @@
 *.pem
 *.zip
 app/contentscript.js
+app/contentscript.js.map
 node_modules/

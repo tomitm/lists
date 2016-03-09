@@ -1,3 +1,7 @@
+/*
+ * Sidebar
+ */
+
 .list-of-lists {
   margin: 10px -15px;
 }
@@ -48,6 +52,11 @@ ul.list-membership-container li {
   border-bottom-right-radius: 3px;
 }
 
+
+/*
+ * Profile hovercard
+ */
+
 .ProfileCardLists .list-membership-container {
   margin-bottom: 0;
   /* li are 37px each, 37*4 = 148 */
@@ -67,4 +76,51 @@ ul.list-membership-container li {
 
 .ProfileCardLists .list-membership-container li:last-child {
   border-bottom: 0;
+}
+
+
+/*
+ * Manage lists - /user/lists & /user/memberships
+ */
+
+.Grid-cell[data-test-selector="ProfileTimelineList"] {
+  background: #fff;
+  border-left: 1px solid #e1e8ed;
+  border-right: 1px solid #e1e8ed;
+  background-clip: padding-box;
+  margin-bottom: 0 !important;
+}
+
+.Grid-cell .ProfileListItem {
+  margin: 0;
+  padding: 10px 15px;
+}
+
+.drag-ready .ProfileListItem {
+  cursor: grab;
+  cursor: -webkit-grab;
+}
+
+/* below from dragula; don't want to setup a css build task yet... */
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+}
+.gu-hide {
+  display: none !important;
+}
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
 }
