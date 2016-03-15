@@ -16,8 +16,7 @@ export function captureException(...args) {
 }
 
 export default function setup(pageChange) {
-  if (pageChange) {
-    return;
-  }
+  if (pageChange) return;
+  
   Raven.config(raven.DSN, config).install();
 }

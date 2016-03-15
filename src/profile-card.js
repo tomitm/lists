@@ -60,9 +60,7 @@ function listClick(e) {
   * @param {string} listOfLists
   */
 function appendProfileHovercard(listOfLists) {
-  if (!listOfLists) {
-    return;
-  }
+  if (!listOfLists) return;
 
   var container = getHoverContainer();
   if (!container) return;

@@ -8,7 +8,7 @@ import { getUsername, fetchTemplate } from './twitter.js';
 function fetchLists(username) {
   if (!username) {
     console.debug('[lists] Unable to fetch lists; no username');
-    return Promise.resolve(undefined);
+    return Promise.resolve();
   }
 
   return fetchTemplate(`/${username}/lists`);
@@ -21,7 +21,7 @@ function fetchLists(username) {
 function extractLists(res) {
   if (!res) {
     return;
-  } else if(!res.page) {
+  } else if (!res.page) {
     throw new Error("Invalid response received in extractList: " + JSON.stringify(res));
   }
 
@@ -37,9 +37,8 @@ function extractLists(res) {
   * @return {array<object>} - Accessible list info
   */
 function getMetadata(elements) {
-  if (!elements) {
-    return [];
-  }
+  if (!elements) return [];
+
   // convert elements to metadata, so we can easily use it
   return elements.map(function (element) {
     return {
@@ -55,9 +54,7 @@ function getMetadata(elements) {
   * @return {Promise<object>} - The good stuff is in the html property
   */
 function fetchMemberships(username) {
-  if (!username) {
-    return Promise.resolve(undefined);
-  }
+  if (!username) return Promise.resolve();
 
   return fetchTemplate(`/i/${username}/lists`);
 }
@@ -85,9 +82,7 @@ var lists = null;
   * @return {Promise<array<object>>} lists
   */
 export function getLists() {
-  if (lists) {
-    return lists;
-  }
+  if (lists) return lists;
 
   var username = getUsername();
   lists = fetchLists(username)
@@ -95,9 +90,9 @@ export function getLists() {
     .then(getMetadata);
 
   // on failure, reset so we can try again later
-  lists.then((l) => {
-    if (!l) return Promise.reject()
-    return l;
+  lists.then((result) => {
+    if (!result) return Promise.reject()
+    return result;
   }).catch(() => { lists = null; });
 
   return lists;
