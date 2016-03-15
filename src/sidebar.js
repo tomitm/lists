@@ -2,6 +2,9 @@ import { getLists } from './lists.js';
 import { captureException } from './error-reporting.js';
 
 function createListOfLists(meta) {
+  if (!meta) {
+    return;
+  }
   var linkList = meta.map(list =>
                   `<li>
                     <a class="js-nav" href="${list.href}">${list.name}</a>
@@ -12,6 +15,10 @@ function createListOfLists(meta) {
 }
 
 function createListsModule(listOfLists) {
+  if (!listOfLists) {
+    return;
+  }
+
   // make it feel like part of the dashboard...
   return `<div class="lists-inner">
             <div class="flex-module">
@@ -25,8 +32,8 @@ function createListsModule(listOfLists) {
 
 function addSidebar(html) {
   var dashboard = document.getElementsByClassName('dashboard-left')[0];
-  if (!dashboard) {
-    // bail if we can't find the dashboard; nothing to append to
+  if (!dashboard || !html) {
+    // bail if we can't find the dashboard; nothing to append to or to append
     return;
   }
   var listsElement = document.createElement('div');

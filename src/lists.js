@@ -7,7 +7,8 @@ import { getUsername, fetchTemplate } from './twitter.js';
   **/
 function fetchLists(username) {
   if (!username) {
-    return Promise.reject("No username.");
+    console.debug('[lists] Unable to fetch lists; no username');
+    return Promise.resolve(undefined);
   }
 
   return fetchTemplate(`/${username}/lists`);
@@ -18,9 +19,12 @@ function fetchLists(username) {
   * @return {array<HTMLElement>} - Twitter's template response as HTMLELements
   **/
 function extractLists(res) {
-  if (!res.page) {
-    return Promise.reject("Invalid response received.");
+  if (!res) {
+    return;
+  } else if(!res.page) {
+    throw new Error("Invalid response received in extractList: " + JSON.stringify(res));
   }
+
   // response seems to be the whole page, but we only really need
   // the ProfileListItem-name <a> elements.
   var page = document.createElement('div');
@@ -52,7 +56,7 @@ function getMetadata(elements) {
   */
 function fetchMemberships(username) {
   if (!username) {
-    return Promise.reject("No username.");
+    return Promise.resolve(undefined);
   }
 
   return fetchTemplate(`/i/${username}/lists`);
@@ -63,8 +67,10 @@ function fetchMemberships(username) {
   * @return {string}
   */
 function extractMemberships(res) {
-  if (!res.html) {
-    return Promise.reject("Invalid response received");
+  if (!res) {
+    return;
+  } else if (!res.html) {
+    throw new Error("Invalid response received in extractMemberships: " + JSON.stringify(res));
   }
 
   var html = document.createElement('div');
@@ -89,7 +95,10 @@ export function getLists() {
     .then(getMetadata);
 
   // on failure, reset so we can try again later
-  lists.catch(() => { lists = null; });
+  lists.then((l) => {
+    if (!l) return Promise.reject()
+    return l;
+  }).catch(() => { lists = null; });
 
   return lists;
 }

@@ -60,7 +60,12 @@ function listClick(e) {
   * @param {string} listOfLists
   */
 function appendProfileHovercard(listOfLists) {
+  if (!listOfLists) {
+    return;
+  }
+
   var container = getHoverContainer();
+  if (!container) return;
   var card = container.querySelector(".profile-card");
   if (!card) return;
 
