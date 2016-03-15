@@ -1,4 +1,4 @@
-import {getUsername, fetchTemplate} from './twitter.js';
+import { getUsername, fetchTemplate } from './twitter.js';
 
 /** Get a user's lists from Twitter. This'll return raw template-ish output.
   * This is right off of what you'd find on your real lists page, actually.

@@ -1,4 +1,5 @@
-import {getLists} from './lists.js';
+import { getLists } from './lists.js';
+import { captureException } from './error-reporting.js';
 
 function createListOfLists(meta) {
   var linkList = meta.map(list =>
@@ -34,7 +35,7 @@ function addSidebar(html) {
   listsElement.innerHTML = html;
 }
 
-export function setupSidebar() {
+export default function setup() {
   var listOfLists = document.getElementsByClassName('list-of-lists')[0];
   if (!!listOfLists) {
     // bail if there's already lists on the page
@@ -45,5 +46,8 @@ export function setupSidebar() {
     .then(createListOfLists)
     .then(createListsModule)
     .then(addSidebar)
-    .catch((err) => { console.debug("[lists] failed to setup sidebar", err); });
+    .catch((err) => {
+      captureException(err);
+      console.debug("[lists] failed to setup sidebar", err);
+    });
 }
