@@ -1,5 +1,6 @@
 *.crx
 *.pem
 *.zip
-app/contentscript.js
+app/contentscript.js*
 node_modules/
+config.json

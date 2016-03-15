@@ -1,5 +1,6 @@
-import {getMemberships} from './lists.js';
-import {postForm, fetchTemplate} from './twitter.js';
+import { getMemberships } from './lists.js';
+import { postForm, fetchTemplate } from './twitter.js';
+import { captureException } from './error-reporting.js';
 
 var hoverContainer = null;
 function getHoverContainer() {
@@ -59,7 +60,10 @@ function listClick(e) {
   * @param {string} listOfLists
   */
 function appendProfileHovercard(listOfLists) {
+  if (!listOfLists) return;
+
   var container = getHoverContainer();
+  if (!container) return;
   var card = container.querySelector(".profile-card");
   if (!card) return;
 
@@ -99,6 +103,7 @@ function updateProfileHovercard() {
   getMemberships(userId)
     .then(appendProfileHovercard)
     .catch((err) => {
+      captureException(err);
       console.warn("[lists] failed to setup profile card", err);
     });
 }
@@ -106,7 +111,7 @@ function updateProfileHovercard() {
 /** Initial setup for the profile card feature
   * @param {boolean} [pageChange=false] - If called as a result of page changed
   */
-export function setupProfileCard(pageChange) {
+export default function setup(pageChange) {
   if (pageChange) return;
 
   // Twitter keeps #profile-hover-container around and updates the child nodes

@@ -1,4 +1,4 @@
-import {getUsername, fetchTemplate} from './twitter.js';
+import { getUsername, fetchTemplate } from './twitter.js';
 
 /** Get a user's lists from Twitter. This'll return raw template-ish output.
   * This is right off of what you'd find on your real lists page, actually.
@@ -7,7 +7,8 @@ import {getUsername, fetchTemplate} from './twitter.js';
   **/
 function fetchLists(username) {
   if (!username) {
-    return Promise.reject("No username.");
+    console.debug('[lists] Unable to fetch lists; no username');
+    return Promise.resolve();
   }
 
   return fetchTemplate(`/${username}/lists`);
@@ -18,9 +19,12 @@ function fetchLists(username) {
   * @return {array<HTMLElement>} - Twitter's template response as HTMLELements
   **/
 function extractLists(res) {
-  if (!res.page) {
-    return Promise.reject("Invalid response received.");
+  if (!res) {
+    return;
+  } else if (!res.page) {
+    throw new Error("Invalid response received in extractList: " + JSON.stringify(res));
   }
+
   // response seems to be the whole page, but we only really need
   // the ProfileListItem-name <a> elements.
   var page = document.createElement('div');
@@ -33,9 +37,8 @@ function extractLists(res) {
   * @return {array<object>} - Accessible list info
   */
 function getMetadata(elements) {
-  if (!elements) {
-    return [];
-  }
+  if (!elements) return [];
+
   // convert elements to metadata, so we can easily use it
   return elements.map(function (element) {
     return {
@@ -51,9 +54,7 @@ function getMetadata(elements) {
   * @return {Promise<object>} - The good stuff is in the html property
   */
 function fetchMemberships(username) {
-  if (!username) {
-    return Promise.reject("No username.");
-  }
+  if (!username) return Promise.resolve();
 
   return fetchTemplate(`/i/${username}/lists`);
 }
@@ -63,8 +64,10 @@ function fetchMemberships(username) {
   * @return {string}
   */
 function extractMemberships(res) {
-  if (!res.html) {
-    return Promise.reject("Invalid response received");
+  if (!res) {
+    return;
+  } else if (!res.html) {
+    throw new Error("Invalid response received in extractMemberships: " + JSON.stringify(res));
   }
 
   var html = document.createElement('div');
@@ -79,9 +82,7 @@ var lists = null;
   * @return {Promise<array<object>>} lists
   */
 export function getLists() {
-  if (lists) {
-    return lists;
-  }
+  if (lists) return lists;
 
   var username = getUsername();
   lists = fetchLists(username)
@@ -89,7 +90,10 @@ export function getLists() {
     .then(getMetadata);
 
   // on failure, reset so we can try again later
-  lists.catch(() => { lists = null; });
+  lists.then((result) => {
+    if (!result) return Promise.reject()
+    return result;
+  }).catch(() => { lists = null; });
 
   return lists;
 }

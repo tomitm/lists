@@ -1,6 +1,10 @@
-import {getLists} from './lists.js';
+import { getLists } from './lists.js';
+import { captureException } from './error-reporting.js';
 
 function createListOfLists(meta) {
+  // TODO: show an appropriate message instead when 0 lists
+  if (!meta || meta.length === 0) return;
+
   var linkList = meta.map(list =>
                   `<li>
                     <a class="js-nav" href="${list.href}">${list.name}</a>
@@ -11,6 +15,8 @@ function createListOfLists(meta) {
 }
 
 function createListsModule(listOfLists) {
+  if (!listOfLists) return;
+
   // make it feel like part of the dashboard...
   return `<div class="lists-inner">
             <div class="flex-module">
@@ -24,26 +30,28 @@ function createListsModule(listOfLists) {
 
 function addSidebar(html) {
   var dashboard = document.getElementsByClassName('dashboard-left')[0];
-  if (!dashboard) {
-    // bail if we can't find the dashboard; nothing to append to
-    return;
-  }
+
+  // bail if we can't find the dashboard; nothing to append to, or to append
+  if (!dashboard || !html) return;
+
   var listsElement = document.createElement('div');
   listsElement.className = 'Lists module';
   dashboard.appendChild(listsElement);
   listsElement.innerHTML = html;
 }
 
-export function setupSidebar() {
+export default function setup() {
   var listOfLists = document.getElementsByClassName('list-of-lists')[0];
-  if (!!listOfLists) {
-    // bail if there's already lists on the page
-    return;
-  }
+
+  // bail if there's already lists on the page
+  if (!!listOfLists) return;
 
   getLists()
     .then(createListOfLists)
     .then(createListsModule)
     .then(addSidebar)
-    .catch((err) => { console.debug("[lists] failed to setup sidebar", err); });
+    .catch((err) => {
+      captureException(err);
+      console.debug("[lists] failed to setup sidebar", err);
+    });
 }
