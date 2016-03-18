@@ -2,6 +2,8 @@ import setupSidebar from './sidebar.js';
 import setupProfileCard from './profile-card.js';
 import setupErrorHandling from './error-reporting.js';
 
+import { isLoggedIn, observeChanges } from './twitter.js';
+
 function setup(pageChange) {
   setupErrorHandling(pageChange);
   setupSidebar(pageChange);
@@ -9,14 +11,13 @@ function setup(pageChange) {
 }
 
 function init() {
-  setup();
+  if (!isLoggedIn()) {
+    console.debug('[lists] Not logged in, waiting to init until you are.');
+    return;
+  }
 
-  var observer = new MutationObserver(() => {
-    setup(true);
-  });
-  var target = document.querySelector("head link[rel='canonical']");
-  var config = { attributes: true };
-  observer.observe(target, config);
+  setup();
+  observeChanges("head link[rel='canonical']", () => setup(true));
 }
 
 init();

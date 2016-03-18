@@ -1,3 +1,11 @@
+function getInitData() {
+  var initElement = document.querySelector('#init-data');
+  if (!initElement || !initElement.value) {
+    return {};
+  }
+  return JSON.parse(initElement.value) || {};
+}
+
 export function getUsername() {
   // username is conveniently available as a data property on an element
   var user = document.querySelector('.js-mini-current-user');
@@ -6,8 +14,8 @@ export function getUsername() {
   return user.dataset.screenName;
 }
 
-function getInitData() {
-  return JSON.parse(document.querySelector("#init-data").value);
+export function isLoggedIn() {
+  return getInitData().loggedIn;
 }
 
 export function postForm(url, data) {
@@ -34,11 +42,29 @@ export function fetchTemplate(url) {
   // but it allows this can work out of the box since OAuth isn't needed.
   var options = {
     credentials: 'include',
+    redirect: 'manual',
     headers: {
       accept: 'application/json, text/javascript, */*; q=0.01',
       'x-push-state-request': true // required to return template
     }
   };
   return fetch(url, options)
-    .then(res => res.json());
+    .then((res) => {
+      if (!res.ok) return; // not okay if failed, or redirected to login
+      return res.json();
+    });
+}
+
+export function observeChanges(target, onChange, config = { attributes: true }) {
+  if (!target) {
+    return;
+  } else if (typeof target === 'string') {
+    target = document.querySelector(target);
+  }
+  var observer = new MutationObserver(onChange);
+
+  if (!target) return;
+  observer.observe(target, config);
+
+  return observer;
 }

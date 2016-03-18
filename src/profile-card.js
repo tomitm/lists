@@ -1,5 +1,5 @@
 import { getMemberships } from './lists.js';
-import { postForm, fetchTemplate } from './twitter.js';
+import { postForm, fetchTemplate, observeChanges } from './twitter.js';
 import { captureException } from './error-reporting.js';
 
 var hoverContainer = null;
@@ -114,17 +114,16 @@ function updateProfileHovercard() {
 export default function setup(pageChange) {
   if (pageChange) return;
 
-  // Twitter keeps #profile-hover-container around and updates the child nodes
-  // on hover, so observe that. Sadly don't have direct access to their events.
-  var observer = new MutationObserver((mutations) => {
-    // only update when nodes added (user info inserted)
-    if (mutations[0].addedNodes.length <= 0) return;
-    updateProfileHovercard();
-  });
-
   // The attribute is changed first, but need to wait until the child nodes are
   // added otherwise the element we append to isn't there.
   var config = { childList: true };
   var target = getHoverContainer();
-  observer.observe(target, config);
+
+  // Twitter keeps #profile-hover-container around and updates the child nodes
+  // on hover, so observe that. Sadly don't have direct access to their events.
+  observeChanges(target, (mutations) => {
+    // only update when nodes added (user info inserted)
+    if (mutations[0].addedNodes.length <= 0) return;
+    updateProfileHovercard();
+  }, config);
 }
