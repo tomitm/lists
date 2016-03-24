@@ -1,6 +1,6 @@
 {
   "name": "lists",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "private": true,
   "description": "Lists improvements for Twitter that you'd think were already part of Twitter.",
   "main": "src/contentscript.js",
