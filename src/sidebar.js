@@ -35,15 +35,24 @@ function createListsModule(listOfLists) {
 }
 
 function addSidebar(html) {
-  var dashboard = document.getElementsByClassName('dashboard-left')[0];
+  var sidebar = document.querySelector('.dashboard-left') ||
+                document.querySelector('.ProfileSidebar') ||
+                document.querySelector('.ProfileSidebar--withRightAlignment');
 
   // bail if we can't find the dashboard; nothing to append to, or to append
-  if (!dashboard || !html) return;
+  if (!sidebar || !html) return;
+
 
   var listsElement = document.createElement('div');
   listsElement.className = 'Lists module lists-redux';
-  dashboard.appendChild(listsElement);
   listsElement.innerHTML = html;
+
+  var profileCard = sidebar.querySelector('.DashboardProfileCard');
+  if (profileCard) {
+    sidebar.insertBefore(listsElement, profileCard.nextSibling);
+  } else {
+    sidebar.appendChild(listsElement);
+  }
 }
 
 function handleExisting() {
