@@ -1,15 +1,19 @@
 import { getLists } from './lists.js';
+import { getUsername } from './twitter.js';
 import { captureException } from './error-reporting.js';
 
 function createListOfLists(meta) {
   // TODO: show an appropriate message instead when 0 lists
   if (!meta || meta.length === 0) return;
 
-  var linkList = meta.map(list =>
-                  `<li>
-                    <a class="js-nav" href="${list.href}">${list.name}</a>
-                  </li>`)
-                  .join('\n');
+  var linkList = meta.map(list => {
+    var icon = list.isPrivate ?
+        '<span class="Icon Icon--smallest Icon--protected" title="Private list"></span>'
+        : '';
+    return `<li>
+      <a class="js-nav" href="${list.href}">${icon}${list.name}</a>
+    </li>`;
+  }).join('\n');
 
   return `<ul class="list-of-lists">${linkList}</ul>`;
 }
@@ -17,11 +21,13 @@ function createListOfLists(meta) {
 function createListsModule(listOfLists) {
   if (!listOfLists) return;
 
+  var allHref = `/${getUsername()}/lists`;
+
   // make it feel like part of the dashboard...
   return `<div class="lists-inner">
             <div class="flex-module">
               <div class="flex-module-header">
-                <h3>Lists</h3>
+                <h3><a href="${allHref}">Lists</a></h3>
               </div>
               <div class="flex-module-inner">${listOfLists}</div>
             </div>
@@ -35,16 +41,28 @@ function addSidebar(html) {
   if (!dashboard || !html) return;
 
   var listsElement = document.createElement('div');
-  listsElement.className = 'Lists module';
+  listsElement.className = 'Lists module lists-redux';
   dashboard.appendChild(listsElement);
   listsElement.innerHTML = html;
 }
 
-export default function setup() {
-  var listOfLists = document.getElementsByClassName('list-of-lists')[0];
+function handleExisting() {
+  var moreLists = document.querySelector('[data-component-context="more_lists"]');
+  if (!moreLists) return; // not already on the page
 
-  // bail if there's already lists on the page
-  if (!!listOfLists) return;
+  var user = moreLists.querySelector('h3 a');
+  if (!user) return; // missing username, can't check
+
+  if (user.innerText !== `@${getUsername()}`) return; // noop if for different user
+
+  moreLists.parentNode.removeChild(moreLists);
+}
+
+export default function setup() {
+  var alreadySetup = !!document.querySelector('.module.Lists.lists-redux');
+  if (alreadySetup) return;
+
+  handleExisting();
 
   getLists()
     .then(createListOfLists)

@@ -1,9 +1,15 @@
 /*
  * Sidebar
  */
+.Lists.module h3 a {
+  color: inherit;
+}
 
- .list-of-lists {
+.list-of-lists {
   margin: 10px -15px;
+  /* li are 33px each, 33*10 = 330 */
+  max-height: 331px;
+  overflow-y: auto;
 }
 
 .list-of-lists li {
@@ -20,6 +26,8 @@
   color: #66757f;
   font-size: 14px;
   font-weight: normal;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 .list-of-lists li a:hover,
@@ -27,6 +35,11 @@
   color: #0084b4;
   background-color: #f5f8fa;
   text-decoration: none;
+}
+
+.list-of-lists .Icon--protected {
+  float: right;
+  margin-left: 3px;
 }
 
 .list-membership-container {

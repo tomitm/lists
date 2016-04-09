@@ -1,35 +1,62 @@
 import { getUsername, fetchTemplate } from './twitter.js';
 
-/** Get a user's lists from Twitter. This'll return raw template-ish output.
-  * This is right off of what you'd find on your real lists page, actually.
+/** Get a subset of a user's lists from Twitter.
   * @param {string} username
-  * @return {Promise<object>} The good stuff is in the page property
+  * @param {string} position - min_position from the response of this request
+  * @return {Promise<object>} The good stuff is in the items_html property
   **/
-function fetchLists(username) {
+function _fetchLists(username, position) {
   if (!username) {
     console.debug('[lists] Unable to fetch lists; no username');
     return Promise.resolve();
   }
 
-  return fetchTemplate(`/${username}/lists`);
+  var params = [
+    'include_available_features=1',
+    'include_entities=1',
+    'reset_error_state=false'
+  ];
+  if (position) {
+    params.push(`max_position=${position}`);
+  }
+  params = '?' + params.join('&');
+
+  return fetchTemplate(`/i/lists/lists/${username}/timeline${params}`);
+}
+
+/** Get all a user's lists from Twitter. This will return raw template-ish output.
+  * This is right off of what you'd find on your real lists page, actually.
+  * If has_more_items, then it will recursively request until there are no more.
+  * @param {string} username
+  * @param {string} [position] - min_position, used as a pagination cursor
+  * @param {string} [_html=''] - internal use
+  * @return {Promise<string>} Template HTML as a string.
+*/
+function fetchLists(username, position, _html = "") {
+  return _fetchLists(username, position).then((res) => {
+    if (!res) {
+      return;
+    } else if (!res.items_html) {
+      throw new Error('Invalid response received in fetchLists: ' + JSON.stringify(res));
+    }
+
+    _html += res.items_html;
+    if (res.has_more_items && res.min_position) {
+      return fetchLists(username, res.min_position, _html);
+    }
+    return _html;
+  });
 }
 
 /** Extract the list elements from Twitter's template.
-  * @param {object} res - Twitter's template response as a JSON object of strings.
+  * @param {string} res - Twitter's template response as an HTML string.
   * @return {array<HTMLElement>} - Twitter's template response as HTMLELements
   **/
-function extractLists(res) {
-  if (!res) {
-    return;
-  } else if (!res.page) {
-    throw new Error("Invalid response received in extractList: " + JSON.stringify(res));
-  }
-
-  // response seems to be the whole page, but we only really need
-  // the ProfileListItem-name <a> elements.
+function extractLists(html) {
+  // lists are the .ProfileListItem elements.
   var page = document.createElement('div');
-  page.innerHTML = res.page;
-  return [...page.getElementsByClassName('ProfileListItem-name')];
+  page.innerHTML = html;
+  return [...page.querySelectorAll('.ProfileListItem')];
 }
 
 /** Convert elements into sweet JSON metadata for our use.
@@ -41,10 +68,10 @@ function getMetadata(elements) {
 
   // convert elements to metadata, so we can easily use it
   return elements.map(function (element) {
-    return {
-      name: element.innerText,
-      href: element.href
-    };
+    var { userId, listId } = element.dataset;
+    var { innerText: name, href } = element.querySelector('.ProfileListItem-name');
+    var isPrivate = !!element.querySelector('.Icon--protected');
+    return { name, href, isPrivate, userId, listId };
   });
 }
 
