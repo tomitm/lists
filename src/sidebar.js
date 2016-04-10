@@ -48,8 +48,11 @@ function addSidebar(html) {
   listsElement.innerHTML = html;
 
   var profileCard = sidebar.querySelector('.DashboardProfileCard');
+  var footer = sidebar.querySelector('.Trends') || sidebar.querySelector('.Footer');
   if (profileCard) {
     sidebar.insertBefore(listsElement, profileCard.nextSibling);
+  } else if (footer) {
+    footer.parentNode.insertBefore(listsElement, footer);
   } else {
     sidebar.appendChild(listsElement);
   }

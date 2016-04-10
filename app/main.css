@@ -1,6 +1,7 @@
 /*
  * Sidebar
  */
+
 .Lists.module h3 a {
   color: inherit;
 }
@@ -63,6 +64,10 @@ ul.list-membership-container li {
   border-bottom: 1px solid #e1e8ed;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
+}
+
+.SidebarCommonModules .Lists {
+  margin-top: 10px;
 }
 
 
