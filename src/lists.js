@@ -41,8 +41,9 @@ function fetchLists(username, position, _html = "") {
     }
 
     _html += res.items_html;
-    if (res.has_more_items && res.min_position) {
-      return fetchLists(username, res.min_position, _html);
+    if (res.has_more_items && res.min_position !== null) {
+      var position = res.min_position || -1;
+      return fetchLists(username, position, _html);
     }
     return _html;
   });
