@@ -32,7 +32,7 @@ function _fetchLists(username, position) {
   * @param {string} [_html=''] - internal use
   * @return {Promise<string>} Template HTML as a string.
 */
-function fetchLists(username, position, _html = "") {
+function fetchLists(username, position = -1, _html = "") {
   return _fetchLists(username, position).then((res) => {
     if (!res) {
       return;
@@ -42,8 +42,7 @@ function fetchLists(username, position, _html = "") {
 
     _html += res.items_html;
     if (res.has_more_items && res.min_position !== null) {
-      var position = res.min_position || -1;
-      return fetchLists(username, position, _html);
+      return fetchLists(username, res.min_position, _html);
     }
     return _html;
   });
