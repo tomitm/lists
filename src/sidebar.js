@@ -6,11 +6,18 @@ function createListOfLists(meta) {
   // TODO: show an appropriate message instead when 0 lists
   if (!meta || meta.length === 0) return;
 
+  var current = null;
+  var listCard = document.querySelector('.list-follow-card');
+  if (listCard) {
+    current = listCard.dataset.listId;
+  }
+
   var linkList = meta.map(list => {
+    var active = current === list.listId;
     var icon = list.isPrivate ?
         '<span class="Icon Icon--smallest Icon--protected" title="Private list"></span>'
         : '';
-    return `<li>
+    return `<li ${active ? 'class="active"' : ''}>
       <a class="js-nav" href="${list.href}">${icon}${list.name}</a>
     </li>`;
   }).join('\n');
