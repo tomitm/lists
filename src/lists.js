@@ -56,7 +56,8 @@ function extractLists(html) {
   // lists are the .ProfileListItem elements.
   var page = document.createElement('div');
   page.innerHTML = html;
-  return [...page.querySelectorAll('.ProfileListItem')];
+  // [...qsa] requires a polyfill for chrome <45
+  return Array.prototype.slice.call(page.querySelectorAll('.ProfileListItem'));
 }
 
 /** Convert elements into sweet JSON metadata for our use.
