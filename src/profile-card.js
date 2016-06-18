@@ -1,4 +1,4 @@
-import { getMemberships } from './lists.js';
+import { getMemberships } from './memberships.js';
 import { postForm, fetchTemplate, observeChanges } from './twitter.js';
 import { captureException } from './error-reporting.js';
 

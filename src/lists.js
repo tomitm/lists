@@ -76,34 +76,6 @@ function getMetadata(elements) {
   });
 }
 
-/** Fetch the list memberships for the given user in the current users' lists.
-  * This is a raw HTML template that Twitter uses on the add to list modal.
-  * @param {string} username
-  * @return {Promise<object>} - The good stuff is in the html property
-  */
-function fetchMemberships(username) {
-  if (!username) return Promise.resolve();
-
-  return fetchTemplate(`/i/${username}/lists`);
-}
-
-/** Extract the HTML from the JSON payload and grab just the container.
-  * @param {Object} res
-  * @return {string}
-  */
-function extractMemberships(res) {
-  if (!res) {
-    return;
-  } else if (!res.html) {
-    throw new Error("Invalid response received in extractMemberships: " + JSON.stringify(res));
-  }
-
-  var html = document.createElement('div');
-  html.innerHTML = res.html;
-  return html.querySelector('.list-membership-container').outerHTML;
-}
-
-
 var lists = null;
 
 /** Get the current user's lists.
@@ -124,13 +96,4 @@ export function getLists() {
   }).catch(() => { lists = null; });
 
   return lists;
-}
-
-/** Get a given user's list memberships
-  * @param {string} username
-  * @return {Promise<string>} Memberships modal HTML
-  */
-export function getMemberships(username) {
-  return fetchMemberships(username)
-    .then(extractMemberships);
 }
