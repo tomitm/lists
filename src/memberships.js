@@ -32,7 +32,7 @@ function extractMemberships(res) {
   * @param {array<HTMLElement>} elements
   * @return {array<HTMLElement>}
 */
-function processMemberships(elements) {
+export function sortMemberships(elements) {
   if (!elements) return [];
 
   const isChecked = (el) => el.querySelector('.membership-checkbox').checked;
@@ -61,6 +61,6 @@ function toHTML(elements) {
 export function getMemberships(username) {
   return fetchMemberships(username)
     .then(extractMemberships)
-    .then(processMemberships)
+    .then(sortMemberships)
     .then(toHTML);
 }
