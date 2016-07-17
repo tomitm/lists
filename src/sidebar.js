@@ -1,5 +1,6 @@
 import { getLists } from './lists.js';
 import { getUsername } from './twitter.js';
+import { createPrefsDropdown, setupPrefsDropdown } from './preferences.js';
 import { captureException } from './error-reporting.js';
 
 function createListOfLists(meta) {
@@ -35,6 +36,7 @@ function createListsModule(listOfLists) {
             <div class="flex-module">
               <div class="flex-module-header">
                 <h3><a href="${allHref}">Lists</a></h3>
+                ${createPrefsDropdown()}
               </div>
               <div class="flex-module-inner">${listOfLists}</div>
             </div>
@@ -63,6 +65,7 @@ function addSidebar(html) {
   } else {
     sidebar.appendChild(listsElement);
   }
+  setupPrefsDropdown();
 }
 
 function handleExisting() {
