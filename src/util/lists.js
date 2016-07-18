@@ -1,4 +1,5 @@
 import { getUsername, fetchTemplate } from './twitter.js';
+import { preferences, SORT_ALPHA } from './preferences.js';
 
 /** Get a subset of a user's lists from Twitter.
   * @param {string} username
@@ -76,6 +77,21 @@ function getMetadata(elements) {
   });
 }
 
+function sortLists(metadata) {
+  const getName = (list) => list.name.toLowerCase();
+  if (preferences.sort === SORT_ALPHA) {
+    return metadata.sort((a, b) => {
+      var aName = getName(a);
+      var bName = getName(b);
+
+      if (aName > bName) return 1;
+      if (aName < bName) return -1;
+      return 0;
+    });
+  }
+  return metadata;
+}
+
 var lists = null;
 
 /** Get the current user's lists.
@@ -87,7 +103,8 @@ export function getLists() {
   var username = getUsername();
   lists = fetchLists(username)
     .then(extractLists)
-    .then(getMetadata);
+    .then(getMetadata)
+    .then(sortLists);
 
   // on failure, reset so we can try again later
   lists.then((result) => {

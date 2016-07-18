@@ -1,10 +1,10 @@
-import setupPreferences from './preferences.js';
+import setupPreferences from './util/preferences.js';
+import setupErrorHandling from './util/error-reporting.js';
+import { isLoggedIn, observeChanges } from './util/twitter.js';
+
 import setupSidebar from './sidebar.js';
 import setupProfileCard from './profile-card.js';
-import setupErrorHandling from './error-reporting.js';
 import setupModal from './modal.js';
-
-import { isLoggedIn, observeChanges } from './twitter.js';
 
 function setup(pageChange) {
   setupPreferences(pageChange);

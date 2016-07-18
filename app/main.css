@@ -60,8 +60,25 @@
   margin-top: 10px;
 }
 
+/*
+ * Sidebar prefs
+ */
+
 .Lists .list-prefs {
   float: right;
+}
+
+.Lists .list-prefs .Prefs-ActionButton {
+  color: #aab8c2;
+  display: inline-block;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 2px;
+  position: relative;
+}
+
+.Lists .list-prefs .dropdown-menu {
+  margin: 8px -10px 0;
 }
 
 

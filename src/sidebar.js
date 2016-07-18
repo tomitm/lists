@@ -1,7 +1,7 @@
-import { getLists } from './lists.js';
-import { getUsername } from './twitter.js';
-import { createPrefsDropdown, setupPrefsDropdown } from './preferences.js';
-import { captureException } from './error-reporting.js';
+import { getLists } from './util/lists.js';
+import { getUsername } from './util/twitter.js';
+import { createPrefsDropdown, setupPrefsDropdown } from './util/preferences.js';
+import { captureException } from './util/error-reporting.js';
 
 function createListOfLists(meta) {
   // TODO: show an appropriate message instead when 0 lists

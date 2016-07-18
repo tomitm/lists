@@ -2,9 +2,13 @@ import {
   set as updateStorage,
   get as getFromStorage,
   addChangeListener
-} from './util/storage.js';
+} from './storage.js';
 
 const PREFS_KEY = 'prefs';
+
+export const SORT_ALPHA = 'ALPHA';
+export const SORT_NONE = null;
+
 var _preferences = {};
 
 function loadPreferences() {
@@ -27,7 +31,7 @@ export function setPreference(change) {
 
 export function createPrefsDropdown() {
   return `<div class="list-prefs dropdown">
-            <button class="ProfileTweet-actionButton u-textUserColorHover dropdown-toggle js-dropdown-toggle" type="button" aria-haspopup="true" id="menu-0">
+            <button class="Prefs-ActionButton u-textUserColorHover dropdown-toggle js-dropdown-toggle" type="button" aria-haspopup="true" id="menu-0">
                 <div class="IconContainer js-tooltip" data-original-title="Preferences">
                   <span class="Icon Icon--filter"></span>
                   <span class="u-hiddenVisually">Preferences</span>
@@ -55,18 +59,15 @@ export function createPrefsDropdown() {
 }
 
 function setSortAlpha() {
-  console.log('sort alpha');
-  setPreference({sort: 'ALPHA'});
+  setPreference({sort: SORT_ALPHA});
 }
 
 function resetSort() {
-  console.log('sort reset');
-  setPreference({sort: null});
+  setPreference({sort: SORT_NONE});
 }
 
 function handleDropdown(evt) {
   var {target} = evt;
-  console.log(this, target);
 
   if (target.classList.contains('js-sort-alpha')) {
     setSortAlpha();
@@ -91,3 +92,5 @@ export default function setupPreferences(pageChange) {
     console.log("storage.onChanged", _preferences);
   });
 }
+
+export {_preferences as preferences};
