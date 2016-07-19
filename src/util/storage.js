@@ -24,7 +24,6 @@ export function set(items) {
 
 export function addChangeListener(key, cb) {
   chrome.storage.onChanged.addListener((changes, areaName) => {
-    console.log('onChanged', areaName, changes);
     if (areaName !== 'sync') return;
     if (!changes[key]) return;
     cb(changes[key].newValue);

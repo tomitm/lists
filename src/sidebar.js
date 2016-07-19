@@ -1,7 +1,9 @@
 import { getLists } from './util/lists.js';
 import { getUsername } from './util/twitter.js';
-import { createPrefsDropdown, setupPrefsDropdown } from './util/preferences.js';
+import { addChangeListener } from './util/preferences.js';
 import { captureException } from './util/error-reporting.js';
+
+import { createPrefsDropdown, setupPrefsDropdown } from './preferences.js';
 
 function createListOfLists(meta) {
   // TODO: show an appropriate message instead when 0 lists
@@ -43,6 +45,13 @@ function createListsModule(listOfLists) {
           </div>`;
 }
 
+function createListsElement(html) {
+  var listsElement = document.createElement('div');
+  listsElement.className = 'Lists module lists-redux';
+  listsElement.innerHTML = html;
+  return listsElement;
+}
+
 function addSidebar(html) {
   var sidebar = document.querySelector('.dashboard-left') ||
                 document.querySelector('.ProfileSidebar') ||
@@ -51,10 +60,7 @@ function addSidebar(html) {
   // bail if we can't find the dashboard; nothing to append to, or to append
   if (!sidebar || !html) return;
 
-
-  var listsElement = document.createElement('div');
-  listsElement.className = 'Lists module lists-redux';
-  listsElement.innerHTML = html;
+  var listsElement = createListsElement(html);
 
   var profileCard = sidebar.querySelector('.DashboardProfileCard');
   var footer = sidebar.querySelector('.Trends') || sidebar.querySelector('.Footer');
@@ -65,6 +71,16 @@ function addSidebar(html) {
   } else {
     sidebar.appendChild(listsElement);
   }
+  setupPrefsDropdown();
+}
+
+function updateSidebar(html) {
+  var existing = document.querySelector('.Lists.module.lists-redux');
+  if (!existing) return addSidebar(html);
+
+  var listsElement = createListsElement(html);
+
+  existing.parentNode.replaceChild(listsElement, existing);
   setupPrefsDropdown();
 }
 
@@ -80,11 +96,23 @@ function handleExisting() {
   moreLists.parentNode.removeChild(moreLists);
 }
 
+function onChange() {
+  getLists()
+    .then(createListOfLists)
+    .then(createListsModule)
+    .then(updateSidebar)
+    .catch((err) => {
+      captureException(err);
+      console.debug("[lists] failed to update sidebar", err);
+    });
+}
+
 export default function setup() {
   var alreadySetup = !!document.querySelector('.module.Lists.lists-redux');
   if (alreadySetup) return;
 
   handleExisting();
+  addChangeListener(onChange);
 
   getLists()
     .then(createListOfLists)

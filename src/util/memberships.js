@@ -1,5 +1,5 @@
 import { fetchTemplate } from './twitter.js';
-import { preferences, SORT_ALPHA } from './preferences.js';
+import { preferences, PREF_SORT, SORT_ALPHA } from './preferences.js';
 
 /** Fetch the list memberships for the given user in the current users' lists.
   * This is a raw HTML template that Twitter uses on the add to list modal.
@@ -49,7 +49,7 @@ export function sortMemberships(elements) {
 
     // sort by checked status first, then name (if preferred)
     if (aChecked === bChecked) {
-      if (preferences.sort === SORT_ALPHA) {
+      if (preferences[PREF_SORT] === SORT_ALPHA) {
         if (aName > bName) return 1;
         if (aName < bName) return -1;
       }

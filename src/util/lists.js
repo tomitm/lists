@@ -1,5 +1,5 @@
 import { getUsername, fetchTemplate } from './twitter.js';
-import { preferences, SORT_ALPHA } from './preferences.js';
+import { preferences, PREF_SORT, SORT_ALPHA } from './preferences.js';
 
 /** Get a subset of a user's lists from Twitter.
   * @param {string} username
@@ -79,8 +79,8 @@ function getMetadata(elements) {
 
 function sortLists(metadata) {
   const getName = (list) => list.name.toLowerCase();
-  if (preferences.sort === SORT_ALPHA) {
-    return metadata.sort((a, b) => {
+  if (preferences[PREF_SORT] === SORT_ALPHA) {
+    return metadata.slice().sort((a, b) => {
       var aName = getName(a);
       var bName = getName(b);
 
@@ -98,19 +98,20 @@ var lists = null;
   * @return {Promise<array<object>>} lists
   */
 export function getLists() {
-  if (lists) return lists;
+  if (!lists) {
+    var username = getUsername();
+    lists = fetchLists(username)
+      .then(extractLists)
+      .then(getMetadata);
 
-  var username = getUsername();
-  lists = fetchLists(username)
-    .then(extractLists)
-    .then(getMetadata)
-    .then(sortLists);
+      // on failure, reset so we can try again later
+      lists.then((result) => {
+        if (!result) return Promise.reject()
+        return result;
+      }).catch(() => {
+        lists = null;
+      });
+  }
 
-  // on failure, reset so we can try again later
-  lists.then((result) => {
-    if (!result) return Promise.reject()
-    return result;
-  }).catch(() => { lists = null; });
-
-  return lists;
+  return lists.then(sortLists);
 }
