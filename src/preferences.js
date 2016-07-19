@@ -13,7 +13,7 @@ export function createPrefsDropdown() {
     </li>`;
 
   return `<div class="list-prefs dropdown">
-            <button class="Prefs-ActionButton u-textUserColorHover dropdown-toggle js-dropdown-toggle" type="button" aria-haspopup="true" id="menu-0">
+            <button class="Prefs-ActionButton u-textUserColorHover dropdown-toggle js-dropdown-toggle" type="button" tabindex="-1" aria-haspopup="true" id="menu-0">
                 <div class="IconContainer js-tooltip" data-original-title="Preferences">
                   <span class="Icon Icon--filter"></span>
                   <span class="u-hiddenVisually">Preferences</span>
@@ -41,6 +41,27 @@ function setSort(type) {
   setPreference(pref);
 }
 
+function closeDropdown(evt) {
+  var target = evt.relatedTarget;
+
+  if (!target) { // not related? shut 'er down.
+    this.classList.remove('open');
+    return;
+  }
+
+  // focused on a tabstop? let's help a little
+  if (target.classList.contains('js-first-tabstop') ||
+      target.classList.contains('js-last-tabstop')) {
+    this.querySelector('.dropdown-link').focus();
+    return;
+  }
+
+  // avoid prematurely closing on a dropdown link
+  if (target.classList.contains('dropdown-link')) return;
+
+  this.classList.remove('open');
+}
+
 function handleDropdown(evt) {
   var {target} = evt;
 
@@ -54,6 +75,7 @@ function handleDropdown(evt) {
 }
 
 export function setupPrefsDropdown() {
-  document.querySelector('.list-prefs')
-    .addEventListener('click', handleDropdown);
+  var prefsElement = document.querySelector('.list-prefs');
+  prefsElement.addEventListener('click', handleDropdown);
+  prefsElement.addEventListener('focusout', closeDropdown);
 }
