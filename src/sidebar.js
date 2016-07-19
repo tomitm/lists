@@ -31,13 +31,11 @@ function createListOfLists(meta) {
 function createListsModule(listOfLists) {
   if (!listOfLists) return;
 
-  var allHref = `/${getUsername()}/lists`;
-
   // make it feel like part of the dashboard...
   return `<div class="lists-inner">
             <div class="flex-module">
               <div class="flex-module-header">
-                <h3><a href="${allHref}">Lists</a></h3>
+                <h3>Lists</h3>
                 ${createPrefsDropdown()}
               </div>
               <div class="flex-module-inner">${listOfLists}</div>
