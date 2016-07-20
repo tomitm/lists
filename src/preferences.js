@@ -20,18 +20,18 @@ export function createPrefsDropdown() {
                 </div>
             </button>
 
-            <div class="dropdown-menu"><div class="js-first-tabstop" tabindex="0"></div>
-
-            <div class="dropdown-caret">
-              <div class="caret-outer"></div>
-              <div class="caret-inner"></div>
+            <div class="dropdown-menu">
+              <div class="js-first-tabstop" tabindex="0"></div>
+              <div class="dropdown-caret">
+                <div class="caret-outer"></div>
+                <div class="caret-inner"></div>
+              </div>
+              <ul tabindex="-1" role="menu" aria-labelledby="menu-0" aria-hidden="false">
+                  ${sortAlphaLi}
+                  ${resetSortLi}
+              </ul>
+              <div class="js-last-tabstop" tabindex="0"></div>
             </div>
-
-            <ul tabindex="-1" role="menu" aria-labelledby="menu-0" aria-hidden="false">
-                ${sortAlphaLi}
-                ${resetSortLi}
-            </ul>
-            <div class="js-last-tabstop" tabindex="0"></div>
           </div>`;
 }
 
