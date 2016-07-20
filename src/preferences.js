@@ -1,13 +1,16 @@
 import { preferences, setPreference, PREF_SORT, SORT_ALPHA, SORT_NONE } from './util/preferences.js';
 
+/** Create preferences dropdown HTML.
+  * @return {string} html
+  */
 export function createPrefsDropdown() {
-  var sortPreference = preferences[PREF_SORT];
-  var sortAlphaLi = sortPreference === SORT_ALPHA ? '' :
+  var sort = preferences[PREF_SORT];
+  var sortAlphaLi = sort === SORT_ALPHA ? '' :
     `<li role="presentation">
       <button type="button" class="js-sort-alpha dropdown-link" role="menuitem">Sort alphabetically</button>
     </li>`;
 
-  var resetSortLi = (sortPreference === SORT_NONE || sortPreference === undefined) ? '' :
+  var resetSortLi = (sort === SORT_NONE || !sort) ? '' :
     `<li role="presentation">
       <button type="button" class="js-sort-reset dropdown-link" role="menuitem">Reset sorting</button>
     </li>`;
@@ -35,13 +38,19 @@ export function createPrefsDropdown() {
           </div>`;
 }
 
+/** Update the sort preference.
+  * @param {string} type - New sort type
+  */
 function setSort(type) {
   var pref = {};
   pref[PREF_SORT] = type;
   setPreference(pref);
 }
 
-function closeDropdown(evt) {
+/** Handle focus change on dropdown to close the menu.
+  * @param {FocusEvent} evt - focus event via event listener
+  */
+function handleFocus(evt) {
   var target = evt.relatedTarget;
 
   if (!target) { // not related? shut 'er down.
@@ -62,7 +71,10 @@ function closeDropdown(evt) {
   this.classList.remove('open');
 }
 
-function handleDropdown(evt) {
+/** Handle clicks on dropdown menu items and toggles the menu state.
+  * @param {MouseEvent} evt - click event via event listener
+  */
+function handleClick(evt) {
   var {target} = evt;
 
   if (target.classList.contains('js-sort-alpha')) {
@@ -74,8 +86,10 @@ function handleDropdown(evt) {
   this.classList.toggle('open');
 }
 
+/** Setup listeners necessary for prefs dropdown.
+  */
 export function setupPrefsDropdown() {
   var prefsElement = document.querySelector('.list-prefs');
-  prefsElement.addEventListener('click', handleDropdown);
-  prefsElement.addEventListener('focusout', closeDropdown);
+  prefsElement.addEventListener('click', handleClick);
+  prefsElement.addEventListener('focusout', handleFocus);
 }

@@ -29,7 +29,7 @@ function extractMemberships(res) {
   return Array.prototype.slice.call(html.querySelectorAll('.list-membership-container li'));
 }
 
-/** Process list of memberships. Sort by checked first.
+/** Process list of memberships. Sort by checked first, then name (if preferred).
   * @param {array<HTMLElement>} elements
   * @return {array<HTMLElement>}
 */

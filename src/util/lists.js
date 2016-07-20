@@ -77,6 +77,10 @@ function getMetadata(elements) {
   });
 }
 
+/** Sort lists by preference, otherwise return as-is.
+  * @param {array<object>} metadata - Accessible list info.
+  * @return {array<object>}
+  */
 function sortLists(metadata) {
   const getName = (list) => list.name.toLowerCase();
   if (preferences[PREF_SORT] === SORT_ALPHA) {
@@ -94,7 +98,8 @@ function sortLists(metadata) {
 
 var lists = null;
 
-/** Get the current user's lists.
+/** Get the current user's lists. Lists will be cached, so multiple calls will only
+  * hit the network once, however sorting is not cached.
   * @return {Promise<array<object>>} lists
   */
 export function getLists() {
@@ -104,13 +109,13 @@ export function getLists() {
       .then(extractLists)
       .then(getMetadata);
 
-      // on failure, reset so we can try again later
-      lists.then((result) => {
-        if (!result) return Promise.reject()
-        return result;
-      }).catch(() => {
-        lists = null;
-      });
+    // on failure, reset so we can try again later
+    lists.then((result) => {
+      if (!result) return Promise.reject()
+      return result;
+    }).catch(() => {
+      lists = null;
+    });
   }
 
   return lists.then(sortLists);
