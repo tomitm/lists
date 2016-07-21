@@ -1,6 +1,6 @@
-import { getMemberships } from './memberships.js';
-import { postForm, fetchTemplate, observeChanges } from './twitter.js';
-import { captureException } from './error-reporting.js';
+import { getMemberships } from './util/memberships.js';
+import { postForm, fetchTemplate, observeChanges } from './util/twitter.js';
+import { captureException } from './util/error-reporting.js';
 
 var hoverContainer = null;
 function getHoverContainer() {

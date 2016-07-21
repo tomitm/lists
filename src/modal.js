@@ -1,5 +1,5 @@
-import { sortMemberships } from './memberships.js';
-import { observeChanges } from './twitter.js';
+import { sortMemberships } from './util/memberships.js';
+import { observeChanges } from './util/twitter.js';
 
 var modalContainer = null;
 function getModalContentElement() {

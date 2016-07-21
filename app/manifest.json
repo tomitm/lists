@@ -9,7 +9,8 @@
   "icons": { "128": "icon128.png" },
 
   "permissions": [
-    "https://twitter.com/*"
+    "https://twitter.com/*",
+    "storage"
   ],
   "content_scripts": [
     {

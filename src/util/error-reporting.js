@@ -1,6 +1,6 @@
 import Raven from 'raven-js';
-import { version } from '../package.json';
-import { raven, ids } from '../config.json';
+import { version } from '../../package.json';
+import { raven, ids } from '../../config.json';
 
 const extensionExpr = new RegExp(`^chrome-extension:\/\/${ids.join('|')}\/.*`);
 
@@ -17,6 +17,6 @@ export function captureException(...args) {
 
 export default function setup(pageChange) {
   if (pageChange) return;
-  
+
   Raven.config(raven.DSN, config).install();
 }
