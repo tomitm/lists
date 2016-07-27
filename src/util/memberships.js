@@ -4,7 +4,7 @@ import { preferences, PREF_SORT, SORT_ALPHA } from './preferences.js';
 /** Fetch the list memberships for the given user in the current users' lists.
   * This is a raw HTML template that Twitter uses on the add to list modal.
   * @param {string} username
-  * @return {Promise<object>} - The good stuff is in the html property
+  * @return {Promise<Object>} - The good stuff is in the html property
   */
 function fetchMemberships(username) {
   if (!username) return Promise.resolve();
@@ -14,7 +14,7 @@ function fetchMemberships(username) {
 
 /** Extract the HTML from the JSON payload and grab the member list elements.
   * @param {Object} res
-  * @return {array<HTMLElement>}
+  * @return {HTMLElement[]}
   */
 function extractMemberships(res) {
   if (!res) {
@@ -30,8 +30,8 @@ function extractMemberships(res) {
 }
 
 /** Process list of memberships. Sort by checked first, then name (if preferred).
-  * @param {array<HTMLElement>} elements
-  * @return {array<HTMLElement>}
+  * @param {HTMLElement[]} elements
+  * @return {HTMLElement}
 */
 export function sortMemberships(elements) {
   if (!elements) return [];

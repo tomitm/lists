@@ -26,7 +26,7 @@ export function getPreference(key) {
 }
 
 /** Set preference with a given value.
-  * @param {object} change - includes key to change and value to update to
+  * @param {Object} change - includes key to change and value to update to
   */
 export function setPreference(change) {
   var _preferences = Object.assign({}, _preferences, change);
@@ -36,7 +36,7 @@ export function setPreference(change) {
 }
 
 /** Register a change listener for when preferences update.
-  * @param {function} listener
+  * @param {Function} listener
   */
 export function addChangeListener(listener) {
   addStorageChangeListener(PREFS_KEY, listener);

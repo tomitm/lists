@@ -4,7 +4,7 @@ import { preferences, PREF_SORT, SORT_ALPHA } from './preferences.js';
 /** Get a subset of a user's lists from Twitter.
   * @param {string} username
   * @param {string} position - min_position from the response of this request
-  * @return {Promise<object>} The good stuff is in the items_html property
+  * @return {Promise<Object>} The good stuff is in the items_html property
   **/
 function _fetchLists(username, position) {
   if (!username) {
@@ -33,7 +33,7 @@ function _fetchLists(username, position) {
   * @param {string} [_html=''] - internal use
   * @return {Promise<string>} Template HTML as a string.
 */
-function fetchLists(username, position = -1, _html = "") {
+function fetchLists(username, position = '-1', _html = '') {
   return _fetchLists(username, position).then((res) => {
     if (!res) {
       return;
@@ -50,8 +50,8 @@ function fetchLists(username, position = -1, _html = "") {
 }
 
 /** Extract the list elements from Twitter's template.
-  * @param {string} res - Twitter's template response as an HTML string.
-  * @return {array<HTMLElement>} - Twitter's template response as HTMLELements
+  * @param {string} html - Twitter's template response as an HTML string.
+  * @return {HTMLElement[]} - Twitter's template response as HTMLELements
   **/
 function extractLists(html) {
   // lists are the .ProfileListItem elements.
@@ -62,8 +62,8 @@ function extractLists(html) {
 }
 
 /** Convert elements into sweet JSON metadata for our use.
-  * @param {array<HTMLElement>} - Twitter's template as HTMLELements
-  * @return {array<object>} - Accessible list info
+  * @param {HTMLElement[]} elements - Twitter's template as HTMLELements
+  * @return {Object[]} - Accessible list info
   */
 function getMetadata(elements) {
   if (!elements) return [];
@@ -78,8 +78,8 @@ function getMetadata(elements) {
 }
 
 /** Sort lists by preference, otherwise return as-is.
-  * @param {array<object>} metadata - Accessible list info.
-  * @return {array<object>}
+  * @param {Object[]} metadata - Accessible list info.
+  * @return {Object[]}
   */
 function sortLists(metadata) {
   const getName = (list) => list.name.toLowerCase();
@@ -100,7 +100,7 @@ var lists = null;
 
 /** Get the current user's lists. Lists will be cached, so multiple calls will only
   * hit the network once, however sorting is not cached.
-  * @return {Promise<array<object>>} lists
+  * @return {Promise<Object[]>} lists
   */
 export function getLists() {
   if (!lists) {
@@ -111,7 +111,7 @@ export function getLists() {
 
     // on failure, reset so we can try again later
     lists.then((result) => {
-      if (!result) return Promise.reject()
+      if (!result) return Promise.reject();
       return result;
     }).catch(() => {
       lists = null;

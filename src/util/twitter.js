@@ -6,6 +6,10 @@ function getInitData() {
   return JSON.parse(initElement.value) || {};
 }
 
+function getToken() {
+  return getInitData().formAuthenticityToken;
+}
+
 export function getUsername() {
   // username is conveniently available as a data property on an element
   var user = document.querySelector('.js-mini-current-user');
@@ -21,7 +25,7 @@ export function isLoggedIn() {
 export function postForm(url, data) {
   var form = Object.keys(data)
                     .map((key) => `${key}=${data[key]}`);
-  form.push(`authenticity_token=${getInitData().formAuthenticityToken}`);
+  form.push(`authenticity_token=${getToken()}`);
 
   var options = {
     method: "POST",

@@ -1,7 +1,7 @@
 /** Gets one or more items from storage as an object.
   * @see chrome.storage.sync.get
-  * @param {[string|array|object|null]} keys
-  * @return {Promise<object>}
+  * @param {string|Array|Object|null} keys
+  * @return {Promise<Object>}
   */
 export function get(keys) {
   return new Promise((resolve, reject) => {
@@ -16,8 +16,8 @@ export function get(keys) {
 }
 
 /** Sets multiple items. Unspecified keys will not be affected.
-  * @see chrome.stroage.sync.set
-  * @param {object} items
+  * @see chrome.storage.sync.set
+  * @param {Object} items
   * @return {Promise}
   */
 export function set(items) {
@@ -34,7 +34,7 @@ export function set(items) {
 
 /** Register a listener for whatever a given key updates, to be able to act on changes.
   * @param {string} key - Key to be notified for changes on
-  * @param {function} cb
+  * @param {Function} cb
   */
 export function addChangeListener(key, cb) {
   chrome.storage.onChanged.addListener((changes, areaName) => {
