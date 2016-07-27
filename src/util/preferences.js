@@ -10,16 +10,17 @@ export const PREF_SORT = 'sortType';
 export const SORT_ALPHA = 'ALPHA';
 export const SORT_NONE = 'NONE';
 
-var _preferences = {};
+export let preferences = {}; // eslint-disable-line import/no-mutable-exports
 
 function loadPreferences() {
-  getFromStorage(PREFS_KEY).then((preferences) => {
-    _preferences = preferences[PREFS_KEY];
+  getFromStorage(PREFS_KEY).then((storage) => {
+    preferences = storage[PREFS_KEY];
   });
 }
 
 /** Get preference by key.
-  * @param {string} key
+  * @param {string} key - Preference key
+  * @returns {*} - preference
   */
 export function getPreference(key) {
   return preferences[key];
@@ -27,16 +28,17 @@ export function getPreference(key) {
 
 /** Set preference with a given value.
   * @param {Object} change - includes key to change and value to update to
+  * @returns {Promise} - Resolves when successfully stored, rejects when error
   */
 export function setPreference(change) {
-  var _preferences = Object.assign({}, _preferences, change);
-  var store = {}; // sadly {[PREFS_KEY]: _prefs} requires a babel helper
-  store[PREFS_KEY] = _preferences;
+  const newPreferences = Object.assign({}, preferences, change);
+  const store = {}; // sadly {[PREFS_KEY]: _prefs} requires a babel helper
+  store[PREFS_KEY] = newPreferences;
   return updateStorage(store);
 }
 
 /** Register a change listener for when preferences update.
-  * @param {Function} listener
+  * @param {Function} listener - Listener to be called when preferences update
   */
 export function addChangeListener(listener) {
   addStorageChangeListener(PREFS_KEY, listener);
@@ -47,9 +49,7 @@ export default function setupPreferences(pageChange) {
 
   loadPreferences();
 
-  addChangeListener((preferences) => {
-    _preferences = Object.assign({}, _preferences, preferences);
+  addChangeListener((updates) => {
+    preferences = Object.assign({}, preferences, updates);
   });
 }
-
-export {_preferences as preferences};

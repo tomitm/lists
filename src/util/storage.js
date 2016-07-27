@@ -1,3 +1,5 @@
+/* eslint-disable valid-jsdoc */
+
 /** Gets one or more items from storage as an object.
   * @see chrome.storage.sync.get
   * @param {string|Array|Object|null} keys
@@ -32,9 +34,11 @@ export function set(items) {
   });
 }
 
+/* eslint-enable valid-jsdoc */
+
 /** Register a listener for whatever a given key updates, to be able to act on changes.
   * @param {string} key - Key to be notified for changes on
-  * @param {Function} cb
+  * @param {Function} cb - Callback for when changes occur
   */
 export function addChangeListener(key, cb) {
   chrome.storage.onChanged.addListener((changes, areaName) => {

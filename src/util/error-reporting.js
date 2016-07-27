@@ -6,9 +6,9 @@ const extensionExpr = new RegExp(`^chrome-extension:\/\/${ids.join('|')}\/.*`);
 
 const config = {
   release: version,
-  whitelistUrls: [ extensionExpr ],
-  includePaths: [ extensionExpr ]
-}
+  whitelistUrls: [extensionExpr],
+  includePaths: [extensionExpr]
+};
 
 export function captureException(...args) {
   // 'raven-js' isn't being properly exported

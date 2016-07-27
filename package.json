@@ -7,7 +7,8 @@
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "build-dist": "rollup -c rollup.config.dist.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./src"
   },
   "repository": {
     "type": "git",
@@ -24,11 +25,32 @@
   },
   "devDependencies": {
     "babel-preset-es2015-rollup": "1.1.1",
+    "eslint": "3.1.1",
+    "eslint-config-airbnb-base": "5.0.0",
+    "eslint-plugin-import": "1.12.0",
     "rollup": "0.34.1",
     "rollup-plugin-babel": "2.6.1",
     "rollup-plugin-commonjs": "3.3.0",
     "rollup-plugin-json": "2.0.1",
     "rollup-plugin-node-resolve": "1.7.1",
     "rollup-plugin-uglify": "^1.0.1"
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "rules": {
+      "no-console": 0,
+      "comma-dangle": 0,
+      "linebreak-style": 0,
+      "consistent-return": 0,
+      "import/prefer-default-export": 0,
+      "valid-jsdoc": ["error", {"requireReturn": false}],
+      "max-len": ["error", 120]
+    },
+    "globals": {
+      "document": true,
+      "chrome": true,
+      "fetch": true,
+      "MutationObserver": true
+    }
   }
 }

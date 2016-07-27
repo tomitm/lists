@@ -9,15 +9,15 @@ function createListOfLists(meta) {
   // TODO: show an appropriate message instead when 0 lists
   if (!meta || meta.length === 0) return;
 
-  var current = null;
-  var listCard = document.querySelector('.list-follow-card');
+  let current = null;
+  const listCard = document.querySelector('.list-follow-card');
   if (listCard) {
     current = listCard.dataset.listId;
   }
 
-  var linkList = meta.map(list => {
-    var active = current === list.listId;
-    var icon = list.isPrivate ?
+  const linkList = meta.map(list => {
+    const active = current === list.listId;
+    const icon = list.isPrivate ?
         '<span class="Icon Icon--smallest Icon--protected" title="Private list"></span>'
         : '';
     return `<li ${active ? 'class="active"' : ''}>
@@ -44,24 +44,24 @@ function createListsModule(listOfLists) {
 }
 
 function createListsElement(html) {
-  var listsElement = document.createElement('div');
+  const listsElement = document.createElement('div');
   listsElement.className = 'Lists module lists-redux';
   listsElement.innerHTML = html;
   return listsElement;
 }
 
 function addSidebar(html) {
-  var sidebar = document.querySelector('.dashboard-left') ||
+  const sidebar = document.querySelector('.dashboard-left') ||
                 document.querySelector('.ProfileSidebar') ||
                 document.querySelector('.ProfileSidebar--withRightAlignment');
 
   // bail if we can't find the dashboard; nothing to append to, or to append
   if (!sidebar || !html) return;
 
-  var listsElement = createListsElement(html);
+  const listsElement = createListsElement(html);
 
-  var profileCard = sidebar.querySelector('.DashboardProfileCard');
-  var footer = sidebar.querySelector('.Trends') || sidebar.querySelector('.Footer');
+  const profileCard = sidebar.querySelector('.DashboardProfileCard');
+  const footer = sidebar.querySelector('.Trends') || sidebar.querySelector('.Footer');
   if (profileCard) {
     sidebar.insertBefore(listsElement, profileCard.nextSibling);
   } else if (footer) {
@@ -73,20 +73,20 @@ function addSidebar(html) {
 }
 
 function updateSidebar(html) {
-  var existing = document.querySelector('.Lists.module.lists-redux');
+  const existing = document.querySelector('.Lists.module.lists-redux');
   if (!existing) return addSidebar(html);
 
-  var listsElement = createListsElement(html);
+  const listsElement = createListsElement(html);
 
   existing.parentNode.replaceChild(listsElement, existing);
   setupPrefsDropdown();
 }
 
 function handleExisting() {
-  var moreLists = document.querySelector('[data-component-context="more_lists"]');
+  const moreLists = document.querySelector('[data-component-context="more_lists"]');
   if (!moreLists) return; // not already on the page
 
-  var user = moreLists.querySelector('h3 a');
+  const user = moreLists.querySelector('h3 a');
   if (!user) return; // missing username, can't check
 
   if (user.innerText !== `@${getUsername()}`) return; // noop if for different user
@@ -101,12 +101,12 @@ function onChange() {
     .then(updateSidebar)
     .catch((err) => {
       captureException(err);
-      console.debug("[lists] failed to update sidebar", err);
+      console.debug('[lists] failed to update sidebar', err);
     });
 }
 
 export default function setup() {
-  var alreadySetup = !!document.querySelector('.module.Lists.lists-redux');
+  const alreadySetup = !!document.querySelector('.module.Lists.lists-redux');
   if (alreadySetup) return;
 
   handleExisting();
@@ -118,6 +118,6 @@ export default function setup() {
     .then(addSidebar)
     .catch((err) => {
       captureException(err);
-      console.debug("[lists] failed to setup sidebar", err);
+      console.debug('[lists] failed to setup sidebar', err);
     });
 }

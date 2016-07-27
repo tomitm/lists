@@ -1,5 +1,5 @@
 function getInitData() {
-  var initElement = document.querySelector('#init-data');
+  const initElement = document.querySelector('#init-data');
   if (!initElement || !initElement.value) {
     return {};
   }
@@ -12,7 +12,7 @@ function getToken() {
 
 export function getUsername() {
   // username is conveniently available as a data property on an element
-  var user = document.querySelector('.js-mini-current-user');
+  const user = document.querySelector('.js-mini-current-user');
 
   if (!user) return;
   return user.dataset.screenName;
@@ -23,18 +23,18 @@ export function isLoggedIn() {
 }
 
 export function postForm(url, data) {
-  var form = Object.keys(data)
+  const form = Object.keys(data)
                     .map((key) => `${key}=${data[key]}`);
   form.push(`authenticity_token=${getToken()}`);
 
-  var options = {
-    method: "POST",
+  const options = {
+    method: 'POST',
     credentials: 'include',
     headers: {
       accept: 'application/json, text/javascript, */*; q=0.01',
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     },
-    body: form.join("&")
+    body: form.join('&')
   };
   return fetch(url, options)
     .then(res => res.json());
@@ -44,7 +44,7 @@ export function fetchTemplate(url) {
   // we're part of the page, so do as Twitter does.
   // downside is their cookies only have template access, so no clean API,
   // but it allows this can work out of the box since OAuth isn't needed.
-  var options = {
+  const options = {
     credentials: 'include',
     redirect: 'manual',
     headers: {
@@ -59,15 +59,16 @@ export function fetchTemplate(url) {
     });
 }
 
-export function observeChanges(target, onChange, config = { attributes: true }) {
-  if (!target) {
-    return;
-  } else if (typeof target === 'string') {
-    target = document.querySelector(target);
-  }
-  var observer = new MutationObserver(onChange);
+export function observeChanges(selector, onChange, config = { attributes: true }) {
+  if (!selector) return;
 
-  if (!target) return;
+  let target = selector;
+  if (typeof selector === 'string') {
+    target = document.querySelector(target);
+    if (!target) return;
+  }
+
+  const observer = new MutationObserver(onChange);
   observer.observe(target, config);
 
   return observer;

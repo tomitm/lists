@@ -2,17 +2,17 @@ import { getUsername, fetchTemplate } from './twitter.js';
 import { preferences, PREF_SORT, SORT_ALPHA } from './preferences.js';
 
 /** Get a subset of a user's lists from Twitter.
-  * @param {string} username
+  * @param {string} username - Target user
   * @param {string} position - min_position from the response of this request
   * @return {Promise<Object>} The good stuff is in the items_html property
   **/
-function _fetchLists(username, position) {
+function fetchListsSubset(username, position) {
   if (!username) {
     console.debug('[lists] Unable to fetch lists; no username');
     return Promise.resolve();
   }
 
-  var params = [
+  let params = [
     'include_available_features=1',
     'include_entities=1',
     'reset_error_state=false'
@@ -20,7 +20,7 @@ function _fetchLists(username, position) {
   if (position) {
     params.push(`max_position=${position}`);
   }
-  params = '?' + params.join('&');
+  params = `?${params.join('&')}`;
 
   return fetchTemplate(`/i/lists/lists/${username}/timeline${params}`);
 }
@@ -28,24 +28,25 @@ function _fetchLists(username, position) {
 /** Get all a user's lists from Twitter. This will return raw template-ish output.
   * This is right off of what you'd find on your real lists page, actually.
   * If has_more_items, then it will recursively request until there are no more.
-  * @param {string} username
+  * @param {string} username - Target user
   * @param {string} [position] - min_position, used as a pagination cursor
   * @param {string} [_html=''] - internal use
   * @return {Promise<string>} Template HTML as a string.
 */
 function fetchLists(username, position = '-1', _html = '') {
-  return _fetchLists(username, position).then((res) => {
-    if (!res) {
-      return;
-    } else if (!res.items_html) {
-      throw new Error('Invalid response received in fetchLists: ' + JSON.stringify(res));
+  let html = _html;
+  return fetchListsSubset(username, position).then((res) => {
+    if (!res) return;
+
+    if (!res.items_html) {
+      throw new Error(`Invalid response received in fetchLists: ${JSON.stringify(res)}`);
     }
 
-    _html += res.items_html;
+    html += res.items_html;
     if (res.has_more_items && res.min_position !== null) {
-      return fetchLists(username, res.min_position, _html);
+      return fetchLists(username, res.min_position, html);
     }
-    return _html;
+    return html;
   });
 }
 
@@ -55,7 +56,7 @@ function fetchLists(username, position = '-1', _html = '') {
   **/
 function extractLists(html) {
   // lists are the .ProfileListItem elements.
-  var page = document.createElement('div');
+  const page = document.createElement('div');
   page.innerHTML = html;
   // [...qsa] requires a polyfill for chrome <45
   return Array.prototype.slice.call(page.querySelectorAll('.ProfileListItem'));
@@ -69,24 +70,24 @@ function getMetadata(elements) {
   if (!elements) return [];
 
   // convert elements to metadata, so we can easily use it
-  return elements.map(function (element) {
-    var { userId, listId } = element.dataset;
-    var { innerText: name, href } = element.querySelector('.ProfileListItem-name');
-    var isPrivate = !!element.querySelector('.Icon--protected');
+  return elements.map((element) => {
+    const { userId, listId } = element.dataset;
+    const { innerText: name, href } = element.querySelector('.ProfileListItem-name');
+    const isPrivate = !!element.querySelector('.Icon--protected');
     return { name, href, isPrivate, userId, listId };
   });
 }
 
 /** Sort lists by preference, otherwise return as-is.
   * @param {Object[]} metadata - Accessible list info.
-  * @return {Object[]}
+  * @return {Object[]} - Sorted lists info
   */
 function sortLists(metadata) {
   const getName = (list) => list.name.toLowerCase();
   if (preferences[PREF_SORT] === SORT_ALPHA) {
     return metadata.slice().sort((a, b) => {
-      var aName = getName(a);
-      var bName = getName(b);
+      const aName = getName(a);
+      const bName = getName(b);
 
       if (aName > bName) return 1;
       if (aName < bName) return -1;
@@ -96,7 +97,7 @@ function sortLists(metadata) {
   return metadata;
 }
 
-var lists = null;
+let lists = null;
 
 /** Get the current user's lists. Lists will be cached, so multiple calls will only
   * hit the network once, however sorting is not cached.
@@ -104,7 +105,7 @@ var lists = null;
   */
 export function getLists() {
   if (!lists) {
-    var username = getUsername();
+    const username = getUsername();
     lists = fetchLists(username)
       .then(extractLists)
       .then(getMetadata);

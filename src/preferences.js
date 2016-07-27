@@ -4,19 +4,20 @@ import { preferences, setPreference, PREF_SORT, SORT_ALPHA, SORT_NONE } from './
   * @return {string} html
   */
 export function createPrefsDropdown() {
-  var sort = preferences[PREF_SORT];
-  var sortAlphaLi = sort === SORT_ALPHA ? '' :
+  const sort = preferences[PREF_SORT];
+  const sortAlphaLi = sort === SORT_ALPHA ? '' :
     `<li role="presentation">
       <button type="button" class="js-sort-alpha dropdown-link" role="menuitem">Sort alphabetically</button>
     </li>`;
 
-  var resetSortLi = (sort === SORT_NONE || !sort) ? '' :
+  const resetSortLi = (sort === SORT_NONE || !sort) ? '' :
     `<li role="presentation">
       <button type="button" class="js-sort-reset dropdown-link" role="menuitem">Reset sorting</button>
     </li>`;
 
   return `<div class="list-prefs dropdown">
-            <button class="Prefs-ActionButton u-textUserColorHover dropdown-toggle js-dropdown-toggle" type="button" tabindex="-1" aria-haspopup="true" id="menu-0">
+            <button class="Prefs-ActionButton u-textUserColorHover dropdown-toggle js-dropdown-toggle"
+                    type="button" tabindex="-1" aria-haspopup="true" id="menu-0">
                 <div class="IconContainer js-tooltip" data-original-title="Preferences">
                   <span class="Icon Icon--filter"></span>
                   <span class="u-hiddenVisually">Preferences</span>
@@ -42,7 +43,7 @@ export function createPrefsDropdown() {
   * @param {string} type - New sort type
   */
 function setSort(type) {
-  var pref = {};
+  const pref = {};
   pref[PREF_SORT] = type;
   setPreference(pref);
 }
@@ -51,7 +52,7 @@ function setSort(type) {
   * @param {FocusEvent} evt - focus event via event listener
   */
 function handleFocus(evt) {
-  var target = evt.relatedTarget;
+  const target = evt.relatedTarget;
 
   if (!target) { // not related? shut 'er down.
     this.classList.remove('open');
@@ -75,7 +76,7 @@ function handleFocus(evt) {
   * @param {MouseEvent} evt - click event via event listener
   */
 function handleClick(evt) {
-  var {target} = evt;
+  const { target } = evt;
 
   if (target.classList.contains('js-sort-alpha')) {
     setSort(SORT_ALPHA);
@@ -89,7 +90,7 @@ function handleClick(evt) {
 /** Setup listeners necessary for prefs dropdown.
   */
 export function setupPrefsDropdown() {
-  var prefsElement = document.querySelector('.list-prefs');
+  const prefsElement = document.querySelector('.list-prefs');
   prefsElement.addEventListener('click', handleClick);
   prefsElement.addEventListener('focusout', handleFocus);
 }
