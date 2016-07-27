@@ -1,4 +1,5 @@
 import setupPreferences from './util/preferences.js';
+import setupVersion from './util/version.js';
 import setupErrorHandling from './util/error-reporting.js';
 import { isLoggedIn, observeChanges } from './util/twitter.js';
 
@@ -8,6 +9,7 @@ import setupModal from './modal.js';
 
 function setup(pageChange) {
   setupPreferences(pageChange);
+  setupVersion(pageChange);
   setupErrorHandling(pageChange);
   setupSidebar(pageChange);
   setupProfileCard(pageChange);
