@@ -5,8 +5,8 @@
   "description": "Lists improvements for Twitter that you'd think were already part of Twitter.",
   "main": "src/contentscript.js",
   "scripts": {
-    "build": "rollup -c rollup.config.js",
-    "build-dist": "npm run lint && rollup -c rollup.config.dist.js",
+    "dev": "rollup -c rollup.config.js --environment NODE_ENV:development",
+    "prod": "npm run lint && rollup -c rollup.config.js --environment NODE_ENV:production",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ./src"
   },
@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/tomitm/lists#readme",
   "dependencies": {
-    "raven-js": "3.2.1"
+    "raven-js": "3.3.0"
   },
   "devDependencies": {
     "babel-preset-es2015-rollup": "1.1.1",
@@ -31,14 +31,19 @@
     "rollup": "0.34.1",
     "rollup-plugin-babel": "2.6.1",
     "rollup-plugin-commonjs": "3.3.1",
-    "rollup-plugin-json": "2.0.1",
     "rollup-plugin-node-resolve": "1.7.1",
+    "rollup-plugin-replace": "^1.1.1",
     "rollup-plugin-uglify": "^1.0.1"
   },
   "babel": {
     "presets": [
       "es2015-rollup"
-    ]
+    ],
+    "env": {
+      "production": {
+        "comments": false
+      }
+    }
   },
   "eslintConfig": {
     "extends": "airbnb-base",
@@ -48,8 +53,16 @@
       "linebreak-style": 0,
       "consistent-return": 0,
       "import/prefer-default-export": 0,
-      "valid-jsdoc": ["error", {"requireReturn": false}],
-      "max-len": ["error", 120]
+      "valid-jsdoc": [
+        "error",
+        {
+          "requireReturn": false
+        }
+      ],
+      "max-len": [
+        "error",
+        120
+      ]
     },
     "globals": {
       "document": true,
