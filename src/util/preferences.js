@@ -12,12 +12,6 @@ export const SORT_NONE = 'NONE';
 
 export let preferences = {}; // eslint-disable-line import/no-mutable-exports
 
-function loadPreferences() {
-  getFromStorage(PREFS_KEY).then((storage) => {
-    preferences = storage[PREFS_KEY];
-  });
-}
-
 /** Get preference by key.
   * @param {string} key - Preference key
   * @returns {*} - preference
@@ -42,6 +36,16 @@ export function setPreference(change) {
   */
 export function addChangeListener(listener) {
   addStorageChangeListener(PREFS_KEY, listener);
+}
+
+function loadPreferences() {
+  getFromStorage(PREFS_KEY).then((storage) => {
+    if (typeof storage[PREFS_KEY] !== 'object') {
+      setPreference(preferences); // initialize storage since it hasn't already been.
+      return;
+    }
+    preferences = storage[PREFS_KEY];
+  });
 }
 
 export default function setupPreferences(pageChange) {
