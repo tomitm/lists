@@ -1,8 +1,8 @@
 {
   "name": "lists",
-  "version": "2.1.2",
+  "version": "3.0.0",
   "private": true,
-  "description": "Lists improvements for Twitter that you'd think were already part of Twitter.",
+  "description": "Quick and easy access to Twitter Lists.",
   "main": "src/contentscript.js",
   "scripts": {
     "dev": "rollup -c rollup.config.js --environment NODE_ENV:development",

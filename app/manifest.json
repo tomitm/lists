@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
   "name": "Twitter Lists Redux",
-  "version": "2.1.2",
+  "version": "3.0.0",
 
-  "description": "Lists improvements for Twitter that you'd think were already part of Twitter.",
+  "description": "Quick and easy access to Twitter Lists.",
   "author": "tomitm",
 
   "icons": { "128": "icon128.png" },
