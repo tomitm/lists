@@ -23,8 +23,7 @@ export function isLoggedIn() {
 }
 
 export function postForm(url, data) {
-  const form = Object.keys(data)
-                    .map((key) => `${key}=${data[key]}`);
+  const form = Object.keys(data).map(key => `${key}=${data[key]}`);
   form.push(`authenticity_token=${getToken()}`);
 
   const options = {
