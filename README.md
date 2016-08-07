@@ -1,4 +1,4 @@
-# Twitter Lists Redux
+# Twitter Lists Redux [![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/kcincllgjifchjihkklkcfdniofcjahb.svg?maxAge=172800)](https://chrome.google.com/webstore/detail/twitter-lists-redux/kcincllgjifchjihkklkcfdniofcjahb) [![Chrome Web Store Downloads](https://img.shields.io/chrome-web-store/d/kcincllgjifchjihkklkcfdniofcjahb.svg?maxAge=172800)](https://chrome.google.com/webstore/detail/twitter-lists-redux/kcincllgjifchjihkklkcfdniofcjahb)
 
 Twitter is home to all sorts of fun and fascinating people. But when you try to 
 follow everyone, your timeline starts to get too noisy and you find yourself
