@@ -11,9 +11,8 @@ function getHoverContainer() {
   return hoverContainer;
 }
 
-/** Click handler for list - take the list <li> target, deterime the user and list
-  * then send it off to the server to add/remove from the user from that list.
-  * Behaviour should be exactly like the normal add list menu.
+/** Click handler for list, part one. Just handles the user's click
+ *  and does the grunt work of figuring out relevant elements.
   * @param {MouseEvent} e - Event from click handler
   */
 function listClick(e) {
@@ -31,6 +30,19 @@ function listClick(e) {
     listEl = targets[0];
   }
 
+  // fun story: e.preventDefault() is useless on a checkbox in the event handler
+  // it visually prevents change, but in the handler, checked is the new state
+  setTimeout(() => addUserToList(listEl, containerEl), 0);
+}
+
+/** Click handler for list, part two.
+ *  take the list <li> target, deterime the user and list
+  * then send it off to the server to add/remove from the user from that list.
+  * Behaviour should be exactly like the normal add list menu.
+  * @param {Element} listEl - Target list element that was clicked on
+  * @param {Element} containerEl - Hover container element
+ */
+function addUserToList(listEl, containerEl) {
   // if we somehow failed to get either element, bail as they're essential
   if (!listEl || !containerEl) return;
 

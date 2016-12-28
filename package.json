@@ -21,17 +21,17 @@
   },
   "homepage": "https://github.com/tomitm/lists#readme",
   "dependencies": {
-    "raven-js": "3.3.0"
+    "raven-js": "3.9.1"
   },
   "devDependencies": {
-    "babel-preset-es2015-rollup": "1.1.1",
     "eslint": "3.2.0",
     "eslint-config-airbnb-base": "5.0.1",
     "eslint-plugin-import": "1.12.0",
-    "rollup": "0.34.1",
-    "rollup-plugin-babel": "2.6.1",
-    "rollup-plugin-commonjs": "3.3.1",
-    "rollup-plugin-node-resolve": "1.7.2",
+    "babel-preset-es2015-rollup": "3.0.0",
+    "rollup": "0.38.1",
+    "rollup-plugin-babel": "2.7.1",
+    "rollup-plugin-commonjs": "6.0.1",
+    "rollup-plugin-node-resolve": "2.0.0",
     "rollup-plugin-replace": "1.1.1",
     "rollup-plugin-uglify": "1.0.1"
   },
