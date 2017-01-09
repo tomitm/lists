@@ -11,6 +11,41 @@ function getHoverContainer() {
   return hoverContainer;
 }
 
+/** Click handler for list, part two.
+ *  take the list <li> target, deterime the user and list
+  * then send it off to the server to add/remove from the user from that list.
+  * Behaviour should be exactly like the normal add list menu.
+  * @param {Element} listEl - Target list element that was clicked on
+  * @param {Element} containerEl - Hover container element
+ */
+function addUserToList(listEl, containerEl) {
+  // if we somehow failed to get either element, bail as they're essential
+  if (!listEl || !containerEl) return;
+
+  const listId = listEl.dataset.listId;
+  const userId = containerEl.dataset.userId;
+  const inputEl = listEl.children[`list_${listId}`];
+
+  // Twitter has a cute little pending animation while loading, let's use it.
+  listEl.className = 'pending'; // eslint-disable-line no-param-reassign
+  function clearPending() {
+    listEl.className = null;  // eslint-disable-line no-param-reassign
+  }
+
+  const data = {};
+  if (inputEl.checked) { // user is already a list member, removing instead
+    data._method = 'DELETE';  // eslint-disable-line no-underscore-dangle
+  }
+  postForm(`/i/${userId}/lists/${listId}/members`, data)
+    .then((res) => {
+      if (!res.fetchOk) return; // didn't actually succeed; don't mark as checked
+      // TODO: better indication to the user that their attempt failed
+
+      inputEl.checked = !inputEl.checked;
+    })
+    .then(clearPending, clearPending); // .finally didn't make it into spec?!
+}
+
 /** Click handler for list, part one. Just handles the user's click
  *  and does the grunt work of figuring out relevant elements.
   * @param {MouseEvent} e - Event from click handler
@@ -33,38 +68,6 @@ function listClick(e) {
   // fun story: e.preventDefault() is useless on a checkbox in the event handler
   // it visually prevents change, but in the handler, checked is the new state
   setTimeout(() => addUserToList(listEl, containerEl), 0);
-}
-
-/** Click handler for list, part two.
- *  take the list <li> target, deterime the user and list
-  * then send it off to the server to add/remove from the user from that list.
-  * Behaviour should be exactly like the normal add list menu.
-  * @param {Element} listEl - Target list element that was clicked on
-  * @param {Element} containerEl - Hover container element
- */
-function addUserToList(listEl, containerEl) {
-  // if we somehow failed to get either element, bail as they're essential
-  if (!listEl || !containerEl) return;
-
-  const listId = listEl.dataset.listId;
-  const userId = containerEl.dataset.userId;
-  const inputEl = listEl.children[`list_${listId}`];
-
-  // Twitter has a cute little pending animation while loading, let's use it.
-  listEl.className = 'pending';
-  function clearPending() {
-    listEl.className = null;
-  }
-
-  const data = {};
-  if (inputEl.checked) { // user is already a list member, removing instead
-    data._method = 'DELETE';  // eslint-disable-line no-underscore-dangle
-  }
-  postForm(`/i/${userId}/lists/${listId}/members`, data)
-    .then(() => {
-      inputEl.checked = !inputEl.checked;
-    })
-    .then(clearPending, clearPending); // .finally didn't make it into spec?!
 }
 
 /** Take the list memberships and append them to the profile card, then

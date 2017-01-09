@@ -35,8 +35,15 @@ export function postForm(url, data) {
     },
     body: form.join('&')
   };
+
   return fetch(url, options)
-    .then(res => res.json());
+    .then(res => Promise.all([
+      res.ok, res.status, res.json()
+    ]))
+    .then(([ok, status, res]) => Object.assign(
+      {}, res,
+      { fetchOk: ok, fetchStatus: status }
+    ));
 }
 
 export function fetchTemplate(url) {
