@@ -19,7 +19,7 @@ function updateLists() {
   const memberships = Array.prototype.slice.call(ul.querySelectorAll('li'));
   // sort, then re-insert/order into DOM, maintaining references/listeners
   sortMemberships(memberships)
-    .forEach((li) => ul.insertBefore(li, null));
+    .forEach(li => ul.insertBefore(li, null));
 }
 
 export default function setup(pageChange) {

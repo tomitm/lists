@@ -24,13 +24,13 @@
     "raven-js": "3.9.1"
   },
   "devDependencies": {
-    "eslint": "3.2.0",
-    "eslint-config-airbnb-base": "5.0.1",
-    "eslint-plugin-import": "1.12.0",
+    "eslint": "3.13.0",
+    "eslint-config-airbnb-base": "11.0.1",
+    "eslint-plugin-import": "2.2.0",
     "babel-preset-es2015-rollup": "3.0.0",
-    "rollup": "0.38.1",
+    "rollup": "0.41.1",
     "rollup-plugin-babel": "2.7.1",
-    "rollup-plugin-commonjs": "6.0.1",
+    "rollup-plugin-commonjs": "7.0.0",
     "rollup-plugin-node-resolve": "2.0.0",
     "rollup-plugin-replace": "1.1.1",
     "rollup-plugin-uglify": "1.0.1"
@@ -53,6 +53,7 @@
       "linebreak-style": 0,
       "consistent-return": 0,
       "import/prefer-default-export": 0,
+      "import/extensions": ["error", "always"],
       "valid-jsdoc": [
         "error",
         {

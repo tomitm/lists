@@ -15,7 +15,7 @@ function createListOfLists(meta) {
     current = listCard.dataset.listId;
   }
 
-  const linkList = meta.map(list => {
+  const linkList = meta.map((list) => {
     const active = current === list.listId;
     const icon = list.isPrivate ?
         '<span class="Icon Icon--smallest Icon--protected" title="Private list"></span>'

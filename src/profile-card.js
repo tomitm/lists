@@ -60,7 +60,7 @@ function listClick(e) {
     listEl = e.target;
   } else {
     // clicked on a span/input/etc, use the path to work our way up the path
-    const targets = e.path.filter((el) => el.tagName === 'LI');
+    const targets = e.path.filter(el => el.tagName === 'LI');
     if (targets.length < 1) return;
     listEl = targets[0];
   }

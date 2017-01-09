@@ -7,7 +7,7 @@
   */
 export function get(keys) {
   return new Promise((resolve, reject) => {
-    chrome.storage.sync.get(keys, items => {
+    chrome.storage.sync.get(keys, (items) => {
       if (chrome.runtime.lastError) {
         reject(chrome.runtime.lastError);
         return;

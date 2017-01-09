@@ -83,7 +83,7 @@ function getMetadata(elements) {
   * @return {Object[]} - Sorted lists info
   */
 function sortLists(metadata) {
-  const getName = (list) => list.name.toLowerCase();
+  const getName = list => list.name.toLowerCase();
   if (preferences[PREF_SORT] === SORT_ALPHA) {
     return metadata.slice().sort((a, b) => {
       const aName = getName(a);

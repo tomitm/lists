@@ -36,8 +36,8 @@ function extractMemberships(res) {
 export function sortMemberships(elements) {
   if (!elements) return [];
 
-  const isChecked = (el) => el.querySelector('.membership-checkbox').checked;
-  const getName = (el) => el.innerText.trim().toLowerCase();
+  const isChecked = el => el.querySelector('.membership-checkbox').checked;
+  const getName = el => el.innerText.trim().toLowerCase();
 
   // checked lists first
   const sorted = elements.sort((a, b) => {
@@ -63,7 +63,7 @@ export function sortMemberships(elements) {
 
 function toHTML(elements) {
   return `<ul class="list-membership-container">
-    ${elements.map((e) => e.outerHTML).join('\n')}
+    ${elements.map(e => e.outerHTML).join('\n')}
   </ul>`;
 }
 

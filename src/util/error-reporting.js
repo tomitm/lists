@@ -7,7 +7,7 @@ const env = __ENV__;
 const dsn = __RAVEN_DSN__;
 /* eslint-enable no-undef */
 
-const extensionExpr = new RegExp(`^chrome-extension:\/\/${id}\/.*`);
+const extensionExpr = new RegExp(`^chrome-extension://${id}/.*`);
 
 const config = {
   release: version,
