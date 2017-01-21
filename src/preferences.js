@@ -5,23 +5,25 @@ import { preferences, setPreference, PREF_SORT, SORT_ALPHA, SORT_NONE } from './
   */
 export function createPrefsDropdown() {
   const sort = preferences[PREF_SORT];
-  const sortAlphaLi = sort === SORT_ALPHA ? '' :
-    `<li role="presentation">
-      <button type="button" class="js-sort-alpha dropdown-link" role="menuitem">Sort alphabetically</button>
-    </li>`;
+  const sortAlphaLi = sort === SORT_ALPHA
+    ? ''
+    : `<li role="presentation">
+        <button type="button" class="js-sort-alpha dropdown-link" role="menuitem">Sort alphabetically</button>
+      </li>`;
 
-  const resetSortLi = (sort === SORT_NONE || !sort) ? '' :
-    `<li role="presentation">
-      <button type="button" class="js-sort-reset dropdown-link" role="menuitem">Reset sorting</button>
-    </li>`;
+  const resetSortLi = (sort === SORT_NONE || !sort)
+    ? ''
+    : `<li role="presentation">
+        <button type="button" class="js-sort-reset dropdown-link" role="menuitem">Reset sorting</button>
+      </li>`;
 
   return `<div class="list-prefs dropdown">
             <button class="Prefs-ActionButton u-textUserColorHover dropdown-toggle js-dropdown-toggle"
                     type="button" tabindex="-1" aria-haspopup="true" id="menu-0">
-                <div class="IconContainer js-tooltip" data-original-title="Preferences">
-                  <span class="Icon Icon--filter"></span>
-                  <span class="u-hiddenVisually">Preferences</span>
-                </div>
+              <div class="IconContainer js-tooltip" data-original-title="Preferences">
+                <span class="Icon Icon--filter"></span>
+                <span class="u-hiddenVisually">Preferences</span>
+              </div>
             </button>
 
             <div class="dropdown-menu">

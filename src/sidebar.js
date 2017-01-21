@@ -17,8 +17,8 @@ function createListOfLists(meta) {
 
   const linkList = meta.map((list) => {
     const active = current === list.listId;
-    const icon = list.isPrivate ?
-        '<span class="Icon Icon--smallest Icon--protected" title="Private list"></span>'
+    const icon = list.isPrivate
+        ? '<span class="Icon Icon--smallest Icon--protected" title="Private list"></span>'
         : '';
     return `<li ${active ? 'class="active"' : ''}>
       <a class="js-nav" href="${list.href}">${icon}${list.name}</a>
