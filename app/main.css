@@ -51,11 +51,6 @@
   text-decoration: none;
 }
 
-.list-of-lists .Icon--protected {
-  float: right;
-  margin-left: 3px;
-}
-
 .SidebarCommonModules .Lists {
   margin-top: 10px;
 }
@@ -130,33 +125,6 @@ ul.list-membership-container li {
   border-bottom: 0;
 }
 
-
-/*
- * Manage lists - /:user/lists & /:user/memberships
- */
-
-.Grid-cell[data-item-type="list"] {
-  background: #fff;
-  border-top: 1px solid #e1e8ed;
-  border-left: 1px solid #e1e8ed;
-  border-right: 1px solid #e1e8ed;
-  margin-bottom: 0 !important;
-}
-
-.GridTimeline-items .Grid:first-child .Grid-cell[data-item-type="list"],
-.Grid-cell[data-item-type="list"] > .ProfileListItem {
-  border-top: none;
-}
-
-.GridTimeline-items .Grid:last-child .Grid-cell[data-item-type="list"] {
-  border-bottom: 1px solid #e1e8ed;
-  border-radius: 0 0 5px 5px;
-}
-
-.ProfileHeading .ProfileHeading-content--noFill {
-  /* misleading: this ruleset undoes --noFill */
-  background-color: #fff;
-  border: 1px solid #e1e8ed;
-  margin-bottom: -1px;
-
+.ProfileCardLists .Icon--protected {
+  display: none;
 }
