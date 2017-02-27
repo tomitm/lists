@@ -1,24 +1,18 @@
 import Raven from 'raven-js';
 
-/* eslint-disable no-undef */ // handled by rollup-config-replace
-const id = __CHROME_WEBSTORE_ID__;
-const version = __VERSION__;
-const env = __ENV__;
-const dsn = __RAVEN_DSN__;
-/* eslint-enable no-undef */
-
-const extensionExpr = new RegExp(`^chrome-extension://${id}/.*`);
+const environment = process.env.NODE_ENV;
+const extensionExpr = new RegExp(`^chrome-extension://${process.env.EXTENSION_ID}/.*`);
 
 const config = {
-  release: version,
-  environment: env,
+  environment,
+  release: process.env.VERSION,
   whitelistUrls: [extensionExpr],
   includePaths: [extensionExpr]
 };
 
 export function captureException(...args) {
   // 'raven-js' isn't being properly exported
-  if (env === 'production') {
+  if (environment === 'production') {
     return Raven.captureException(...args);
   }
 }
@@ -26,7 +20,7 @@ export function captureException(...args) {
 export default function setup(pageChange) {
   if (pageChange) return;
 
-  if (env === 'production') {
-    Raven.config(dsn, config).install();
+  if (environment === 'production') {
+    Raven.config(process.env.RAVEN_DSN, config).install();
   }
 }

@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - '7'
+deploy:
+  provider: script
+  script: npm run release
+  on:
+    branch: master
+    tags: true
