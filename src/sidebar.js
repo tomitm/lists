@@ -18,31 +18,31 @@ function createListOfLists(meta) {
   const linkList = meta.map((list) => {
     const active = current === list.listId;
     return `<li ${active ? 'class="active"' : ''}>
-      <a class="js-nav" href="${list.href}">${list.name}</a>
+      <a class="list-link js-nav" href="${list.href}">${list.name}</a>
     </li>`;
   }).join('\n');
 
-  return `<ul class="list-of-lists">${linkList}</ul>`;
+  return `<ul class="js-nav-links">${linkList}</ul>`;
 }
 
 function createListsModule(listOfLists) {
   if (!listOfLists) return;
 
   // make it feel like part of the dashboard...
-  return `<div class="lists-inner">
-            <div class="flex-module">
-              <div class="flex-module-header">
-                <h3>Lists</h3>
+  return `<div role="navigation" class="module list-nav">
+            <div class="content-header">
+              <div class="header-inner">
                 ${createPrefsDropdown()}
+                <h3>Lists</h3>
               </div>
-              <div class="flex-module-inner">${listOfLists}</div>
             </div>
-          </div>`;
+            ${listOfLists}
+          </div>`
 }
 
 function createListsElement(html) {
   const listsElement = document.createElement('div');
-  listsElement.className = 'Lists module lists-redux';
+  listsElement.className = 'Lists component lists-redux';
   listsElement.innerHTML = html;
   return listsElement;
 }
@@ -70,7 +70,7 @@ function addSidebar(html) {
 }
 
 function updateSidebar(html) {
-  const existing = document.querySelector('.Lists.module.lists-redux');
+  const existing = document.querySelector('.Lists.component.lists-redux');
   if (!existing) return addSidebar(html);
 
   const listsElement = createListsElement(html);
@@ -103,7 +103,7 @@ function onChange() {
 }
 
 export default function setup() {
-  const alreadySetup = !!document.querySelector('.module.Lists.lists-redux');
+  const alreadySetup = !!document.querySelector('.Lists.component.lists-redux');
   if (alreadySetup) return;
 
   handleExisting();

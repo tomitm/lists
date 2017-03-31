@@ -3,4 +3,3 @@
 *.zip
 app/contentscript.js*
 node_modules/
-config.json

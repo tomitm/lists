@@ -2,57 +2,8 @@
  * Sidebar
  */
 
-.Lists.module h3 a {
-  color: #66757f;
-}
-
-.Lists.module .flex-module,
-.component[data-component-context="more_lists"] .flex-module {
-  padding-bottom: 0;
-}
-
-.list-of-lists {
-  margin: 10px -15px 0 -15px;
-  /* li are 33px each, 33*10 = 330 */
-  max-height: 331px;
-  overflow-y: auto;
-}
-
-.list-of-lists li {
-  border-top: 1px solid #e1e8ed;
-}
-
-.list-of-lists li a {
-  display: block;
-  padding: 8px 12px;
-  font-size: 14px;
-  font-weight: normal;
-  white-space: normal;
-  word-wrap: break-word;
-}
-
-.list-of-lists li.active a {
-  font-weight: bold;
-}
-
-/* :not(:hover) used to avoid overriding theming */
-
-.list-of-lists li.active a:not(:hover) {
-  color: #292f33;
-}
-
-.list-of-lists li a:not(:hover) {
-  color: #66757f;
-}
-
-.list-of-lists li a:hover,
-.list-membership-container li:hover {
-  background-color: #f5f8fa;
-  text-decoration: none;
-}
-
-.SidebarCommonModules .Lists {
-  margin-top: 10px;
+.Lists .content-header .header-inner {
+  border-bottom-width: 0;
 }
 
 /*
