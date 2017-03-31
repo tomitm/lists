@@ -69,7 +69,8 @@ module.exports = function({env, release} = {}) {
         organisation: process.env.SENTRY_ORG,
         project: process.env.SENTRY_PROJECT,
         apiKey: process.env.SENTRY_API_KEY,
-        release: pkg.version
+        release: pkg.version,
+        deleteAfterCompile: true
       })
     )
   }

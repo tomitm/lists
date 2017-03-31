@@ -112,7 +112,7 @@ export function getLists() {
 
     // on failure, reset so we can try again later
     lists.then((result) => {
-      if (!result) return Promise.reject();
+      if (!result) return Promise.reject(new Error('Failed to load lists.'));
       return result;
     }).catch(() => {
       lists = null;

@@ -8,7 +8,6 @@
     "build": "webpack",
     "lint": "eslint ./src",
     "test": "npm run lint",
-    "preupload": "rimraf ./app/*.js.map",
     "upload": "webstore upload --source=app",
     "prebuild": "rimraf ./app/{*.js,*.js.map} && npm run lint",
     "start": "npm run build -- --watch",
@@ -27,17 +26,17 @@
   },
   "homepage": "https://github.com/tomitm/lists#readme",
   "dependencies": {
-    "raven-js": "3.11.0"
+    "raven-js": "3.13.1"
   },
   "devDependencies": {
     "babel-core": "^6.23.1",
     "babel-loader": "^6.3.2",
     "babel-preset-env": "^1.1.10",
     "babel-preset-es2015-rollup": "3.0.0",
-    "babili-webpack-plugin": "0.0.10",
+    "babili-webpack-plugin": "0.0.11",
     "chrome-webstore-upload-cli": "^1.1.1",
-    "eslint": "3.16.1",
-    "eslint-config-standard": "^6.2.1",
+    "eslint": "3.18.0",
+    "eslint-config-standard": "^7.1.0",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-promise": "^3.4.2",
     "eslint-plugin-standard": "^2.0.1",
