@@ -6,6 +6,10 @@
   border-bottom-width: 0;
 }
 
+.Lists .content-header .header-inner h3 {
+  color: #000;
+}
+
 /*
  * Sidebar prefs
  */

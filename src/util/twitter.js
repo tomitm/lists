@@ -11,11 +11,7 @@ function getToken() {
 }
 
 export function getUsername() {
-  // username is conveniently available as a data property on an element
-  const user = document.querySelector('.js-mini-current-user');
-
-  if (!user) return;
-  return user.dataset.screenName;
+  return getInitData().screenName;
 }
 
 export function isLoggedIn() {
